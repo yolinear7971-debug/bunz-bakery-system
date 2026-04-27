@@ -1,0 +1,2853 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bunz Bakery | 管理系統</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f2ed;
+  --surface: #fdfcfa;
+  --surface2: #f0ede7;
+  --border: #e0dbd2;
+  --border-strong: #c8c2b6;
+  --text: #1c1a17;
+  --text-2: #5a5650;
+  --text-3: #9a948c;
+  --accent: #5aa830;
+  --accent-2: #478a22;
+  --accent-light: #eef8e4;
+  --warn: #8b5a00;
+  --warn-light: #fef6e6;
+  --danger: #8b2020;
+  --danger-light: #fdf0f0;
+  --info: #1a4a7a;
+  --info-light: #edf4fd;
+  --gold: #b8860b;
+  --gold-light: #fefae8;
+  --mono: 'IBM Plex Mono', monospace;
+  --serif: 'PingFang TC', 'Heiti TC', 'Microsoft JhengHei', 'Noto Sans TC', sans-serif;
+  --sans: 'PingFang TC', 'Heiti TC', 'Microsoft JhengHei', 'Noto Sans TC', sans-serif;
+  --r: 6px;
+  --r-lg: 10px;
+  --sh: 0 1px 4px rgba(0,0,0,0.07), 0 0 1px rgba(0,0,0,0.04);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+/* ── Layout ── */
+.app { display: flex; min-height: 100vh; }
+
+aside {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebar-logo {
+  padding: 22px 20px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-logo img {
+  max-width: 100%;
+  height: auto;
+}
+
+.sidebar-logo p {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-top: 2px;
+  font-family: var(--mono);
+}
+
+nav { padding: 14px 10px; flex: 1; }
+
+.nav-group { margin-bottom: 20px; }
+
+.nav-group-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0 10px;
+  margin-bottom: 4px;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-family: var(--sans);
+  font-weight: 500;
+  color: var(--text-2);
+  background: none;
+  border: none;
+  border-radius: var(--r);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s, color 0.12s;
+}
+
+.nav-btn:hover { background: var(--surface2); color: var(--text); }
+.nav-btn.active { background: var(--accent-light); color: var(--accent); }
+
+.nav-btn .icon { font-size: 15px; opacity: 0.8; }
+
+.sidebar-date {
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-3);
+  font-family: var(--mono);
+}
+
+main {
+  flex: 1;
+  padding: 28px 32px;
+  max-width: 1100px;
+  min-width: 0;
+}
+
+.section { display: none; }
+.section.active { display: block; }
+
+/* ── Page titles ── */
+.page-header {
+  margin-bottom: 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.page-title {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 300;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.page-sub {
+  font-size: 13px;
+  color: var(--text-3);
+  margin-top: 3px;
+}
+
+/* ── Cards ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 20px 22px;
+  margin-bottom: 16px;
+  box-shadow: var(--sh);
+}
+
+.card-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── Metrics ── */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.metric {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 16px 18px;
+  box-shadow: var(--sh);
+}
+
+.metric-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  margin-bottom: 6px;
+}
+
+.metric-value {
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--text);
+  font-family: var(--mono);
+  line-height: 1.2;
+}
+
+.metric-value.warn { color: var(--warn); }
+.metric-value.danger { color: var(--danger); }
+.metric-value.success { color: var(--accent); }
+.metric-hint { font-size: 11px; color: var(--text-3); margin-top: 4px; }
+
+/* ── Forms ── */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.form-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.form-grid-4 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+
+.form-group label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-2);
+  letter-spacing: 0.04em;
+}
+
+input[type=text], input[type=number], input[type=date], select, textarea {
+  width: 100%;
+  padding: 8px 11px;
+  font-size: 13px;
+  font-family: var(--sans);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  background: var(--bg);
+  color: var(--text);
+  transition: border-color 0.15s, background 0.15s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239a948c' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px;
+  cursor: pointer;
+}
+
+textarea {
+  font-family: var(--mono);
+  font-size: 12px;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-hint {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-top: -6px;
+  margin-bottom: 8px;
+}
+
+/* ── Buttons ── */
+.btn {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--sans);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+  white-space: nowrap;
+}
+
+.btn:hover { background: var(--surface2); }
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.btn-primary:hover { background: var(--accent-2); border-color: var(--accent-2); }
+
+.btn-danger { color: var(--danger); border-color: #e0b0b0; background: var(--danger-light); font-size: 12px; padding: 5px 10px; }
+.btn-danger:hover { background: #f8dada; }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 4px; }
+
+/* ── Tables ── */
+.table-wrap { overflow-x: auto; margin: 0 -2px; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+th {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  background: var(--surface);
+}
+
+td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: middle;
+}
+
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--bg); }
+
+.mono { font-family: var(--mono); }
+.pos { color: var(--accent); font-family: var(--mono); }
+.neg { color: var(--danger); font-family: var(--mono); }
+.text-2 { color: var(--text-2); }
+.text-3 { color: var(--text-3); }
+
+.summary-row td {
+  background: var(--surface2);
+  font-weight: 600;
+  border-top: 2px solid var(--border-strong);
+}
+
+/* ── Badges ── */
+.badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.badge-ok { background: var(--accent-light); color: var(--accent); }
+.badge-low { background: var(--warn-light); color: var(--warn); }
+.badge-empty { background: var(--danger-light); color: var(--danger); }
+.badge-parent { background: var(--gold-light); color: var(--gold); }
+.badge-branch { background: var(--info-light); color: var(--info); }
+
+/* ── Alerts ── */
+.alert {
+  padding: 10px 14px;
+  border-radius: var(--r);
+  font-size: 13px;
+  margin-top: 10px;
+  display: none;
+}
+
+.alert-success { background: var(--accent-light); color: var(--accent-2); border: 1px solid #b8d9c2; }
+.alert-error { background: var(--danger-light); color: var(--danger); border: 1px solid #e0b0b0; }
+.alert-warn { background: var(--warn-light); color: var(--warn); border: 1px solid #e0c080; }
+.alert-info { background: var(--info-light); color: var(--info); border: 1px solid #b0c8e8; }
+
+/* ── Info boxes ── */
+.info-box {
+  background: var(--accent-light);
+  border: 1px solid #b8d9c2;
+  border-radius: var(--r);
+  padding: 12px 15px;
+  font-size: 13px;
+  color: var(--accent-2);
+  margin-bottom: 14px;
+  line-height: 1.7;
+}
+
+.warn-box {
+  background: var(--warn-light);
+  border: 1px solid #e0c080;
+  border-radius: var(--r);
+  padding: 12px 15px;
+  font-size: 13px;
+  color: var(--warn);
+  margin-bottom: 14px;
+}
+
+/* ── Empty state ── */
+.empty {
+  text-align: center;
+  padding: 32px;
+  color: var(--text-3);
+  font-size: 13px;
+}
+
+/* ── Divider ── */
+.divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+/* ── Two-col layout ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* ── Suggestion box ── */
+.suggestion-box {
+  background: var(--gold-light);
+  border: 1px solid #e0cc80;
+  border-radius: var(--r);
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+
+.suggestion-box h4 {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 8px;
+}
+
+.suggestion-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: 4px 0;
+  border-bottom: 1px dashed #e0cc80;
+  color: var(--text-2);
+}
+
+.suggestion-row:last-child { border-bottom: none; }
+.suggestion-val { font-family: var(--mono); font-weight: 600; color: var(--text); }
+
+/* ── Tag pills ── */
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: var(--mono);
+  background: var(--surface2);
+  color: var(--text-2);
+  margin: 2px;
+}
+
+/* ── Credit chip ── */
+.credit-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-family: var(--mono);
+  font-weight: 600;
+  background: var(--gold-light);
+  color: var(--gold);
+  border: 1px solid #e0cc80;
+}
+
+/* ── Modal ── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(28,26,23,0.45);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  padding: 24px;
+  width: 520px;
+  max-width: calc(100vw - 40px);
+  max-height: calc(100vh - 60px);
+  overflow-y: auto;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  border: 1px solid var(--border);
+}
+
+.modal-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 18px;
+  color: var(--text);
+  font-family: var(--serif);
+}
+
+/* ── Tabs within page ── */
+.subtabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
+
+.subtab {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-3);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.12s, border-color 0.12s;
+  margin-bottom: -1px;
+}
+
+.subtab:hover { color: var(--text); }
+.subtab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.subpanel { display: none; }
+.subpanel.active { display: block; }
+
+/* ── Weather chips ── */
+.weather-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.weather-chip {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.12s;
+  background: var(--bg);
+  color: var(--text-2);
+  font-family: var(--sans);
+}
+
+.weather-chip.selected {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+
+/* ── Changelog ── */
+.cl-entry {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  margin-bottom: 10px;
+  box-shadow: var(--sh);
+  overflow: hidden;
+}
+
+.cl-entry-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  cursor: pointer;
+  transition: background 0.12s;
+  gap: 12px;
+}
+
+.cl-entry-header:hover { background: var(--bg); }
+
+.cl-entry-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.cl-entry-date {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+.cl-entry-product {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cl-entry-summary {
+  font-size: 12px;
+  color: var(--text-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cl-badge-create { background: var(--accent-light); color: var(--accent); }
+.cl-badge-edit { background: var(--info-light); color: var(--info); }
+
+.cl-chevron {
+  font-size: 11px;
+  color: var(--text-3);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.cl-entry.expanded .cl-chevron { transform: rotate(180deg); }
+
+.cl-entry-body {
+  display: none;
+  padding: 0 18px 16px;
+  border-top: 1px solid var(--border);
+}
+
+.cl-entry.expanded .cl-entry-body { display: block; }
+
+.cl-diff-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-top: 12px;
+}
+
+.cl-diff-table th {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 6px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.cl-diff-table td {
+  padding: 7px 10px;
+  border-bottom: 1px dashed var(--border);
+  vertical-align: top;
+}
+
+.cl-diff-table tr:last-child td { border-bottom: none; }
+
+.diff-field { font-weight: 600; color: var(--text-2); }
+.diff-old { color: var(--danger); font-family: var(--mono); text-decoration: line-through; }
+.diff-new { color: var(--accent); font-family: var(--mono); }
+.diff-added { color: var(--accent); font-family: var(--mono); }
+.diff-removed { color: var(--danger); font-family: var(--mono); }
+
+.cl-snapshot-box {
+  margin-top: 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 12px 14px;
+}
+
+.cl-snapshot-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 8px;
+}
+
+.cl-snapshot-row {
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--border);
+  color: var(--text-2);
+}
+
+.cl-snapshot-row:last-child { border-bottom: none; }
+.cl-snapshot-key { min-width: 120px; color: var(--text-3); }
+.cl-snapshot-val { font-family: var(--mono); color: var(--text); }
+
+.mobile-header {
+  display: none;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 16px;
+  height: 52px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-logo {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 28px;
+  cursor: pointer;
+  padding: 4px;
+  background: none;
+  border: none;
+}
+
+.hamburger span {
+  display: block;
+  height: 2px;
+  background: var(--text-2);
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+
+/* Drawer overlay */
+.drawer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(28,26,23,0.4);
+  z-index: 80;
+}
+
+.drawer-overlay.open { display: block; }
+
+/* Sidebar drawer on mobile */
+aside {
+  transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ── Responsive ── */
+@media (max-width: 760px) {
+  .mobile-header { display: flex; }
+
+  aside {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 90;
+    transform: translateX(-100%);
+    box-shadow: 4px 0 24px rgba(0,0,0,0.12);
+  }
+
+  aside.open { transform: translateX(0); }
+
+  main { padding: 16px; }
+  .form-grid-3, .form-grid-4 { grid-template-columns: 1fr 1fr; }
+  .two-col { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile header -->
+<div class="mobile-header">
+  <img src="LOGO/6fd3fd40f9a65152b5c9fe14594e6785.PNG" alt="Bunz Bakery" style="height:28px;">
+  <button class="hamburger" onclick="toggleDrawer()" aria-label="選單">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+
+<!-- Drawer overlay -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+
+<div class="app">
+
+<!-- ── Sidebar ── -->
+<aside>
+  <div class="sidebar-logo">
+    <img src="LOGO/6fd3fd40f9a65152b5c9fe14594e6785.PNG" alt="Bunz Bakery" style="width:160px; display:block; margin-bottom:6px;">
+    <p id="sidebar-date"></p>
+  </div>
+  <nav>
+    <div class="nav-group">
+      <div class="nav-group-label">概覽</div>
+      <button class="nav-btn active" onclick="go('dashboard')"><span class="icon">◈</span> 今日總覽</button>
+      <button class="nav-btn" onclick="go('suggest')"><span class="icon">◎</span> 生產建議</button>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">每日作業</div>
+      <button class="nav-btn" onclick="go('daily-produce')"><span class="icon">⊕</span> 生產記錄</button>
+      <button class="nav-btn" onclick="go('daily-ship')"><span class="icon">⊙</span> 出貨記錄</button>
+      <button class="nav-btn" onclick="go('daily-purchase')"><span class="icon">⊘</span> 進貨記錄</button>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">主檔設定</div>
+      <button class="nav-btn" onclick="go('products')"><span class="icon">▣</span> 產品設定</button>
+      <button class="nav-btn" onclick="go('materials')"><span class="icon">◧</span> 原物料設定</button>
+      <button class="nav-btn" onclick="go('clients')"><span class="icon">◉</span> 客戶設定</button>
+      <button class="nav-btn" onclick="go('suppliers')"><span class="icon">◫</span> 供應商設定</button>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">報表</div>
+      <button class="nav-btn" onclick="go('report')"><span class="icon">▤</span> 出貨報表</button>
+      <button class="nav-btn" onclick="go('stock-report')"><span class="icon">▥</span> 庫存報表</button>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">資料</div>
+      <button class="nav-btn" onclick="go('changelog')"><span class="icon">◷</span> 變更日誌</button>
+      <button class="nav-btn" onclick="go('sync')"><span class="icon">⇄</span> 資料同步</button>
+    </div>
+  </nav>
+</aside>
+
+<!-- ── Main ── -->
+<main>
+
+<!-- 今日總覽 -->
+<div id="tab-dashboard" class="section active">
+  <div class="page-header">
+    <div class="page-title">今日總覽</div>
+    <div class="page-sub" id="dash-date"></div>
+  </div>
+  <div class="metrics" id="dash-metrics"></div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">產品庫存狀態</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>產品</th><th>庫存</th><th>警示量</th><th>狀態</th></tr></thead>
+          <tbody id="dash-product-stock"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">原物料庫存狀態</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>原料</th><th>庫存</th><th>警示量</th><th>狀態</th></tr></thead>
+          <tbody id="dash-material-stock"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">今日出貨記錄</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>客戶</th><th>產品</th><th>數量</th><th>折扣</th><th>金額</th><th>Credit 折抵</th></tr></thead>
+        <tbody id="dash-today-ships"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 生產建議 -->
+<div id="tab-suggest" class="section">
+  <div class="page-header">
+    <div class="page-title">生產建議</div>
+    <div class="page-sub">根據歷史出貨、庫存與天氣，推算今日建議生產量</div>
+  </div>
+  <div class="card">
+    <div class="card-title">今日條件設定</div>
+    <div class="form-grid-3">
+      <div class="form-group">
+        <label>今日天氣</label>
+        <select id="sug-weather">
+          <option value="">請選擇</option>
+          <option>☀️ 晴天</option><option>⛅ 多雲</option><option>🌧️ 雨天</option>
+          <option>🌩️ 颱風</option><option>❄️ 寒流</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>今日最高溫（°C）</label>
+        <input type="number" id="sug-high" placeholder="例：32">
+      </div>
+      <div class="form-group">
+        <label>今日最低溫（°C）</label>
+        <input type="number" id="sug-low" placeholder="例：26">
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:12px">
+      <label>今日節假日備註</label>
+      <input type="text" id="sug-holiday" placeholder="例：端午節前一天、連假最後一天（無則留空）">
+    </div>
+    <button class="btn btn-primary" onclick="generateSuggestion()">產生建議</button>
+  </div>
+  <div id="suggestion-output"></div>
+</div>
+
+<!-- 生產記錄 -->
+<div id="tab-daily-produce" class="section">
+  <div class="page-header">
+    <div class="page-title">生產記錄</div>
+    <div class="page-sub">以批次為單位記錄每日生產、實際良率與原物料消耗</div>
+  </div>
+  <div class="card">
+    <div class="card-title">新增生產記錄</div>
+    <div class="form-grid">
+      <div class="form-group"><label>日期</label><input type="date" id="pr-date"></div>
+      <div class="form-group"><label>產品</label><select id="pr-product" onchange="onProduceProductChange()"></select></div>
+    </div>
+    <hr class="divider">
+    <div class="card-title" style="margin-bottom:10px">批次與良率</div>
+    <div class="form-grid-4">
+      <div class="form-group">
+        <label>實際批次數</label>
+        <input type="number" id="pr-batches" placeholder="例：35" oninput="calcProduceYield()">
+      </div>
+      <div class="form-group">
+        <label>預測產出（顆，自動）</label>
+        <input type="number" id="pr-predicted-pieces" readonly placeholder="—" style="background:var(--surface2);color:var(--text-3)">
+      </div>
+      <div class="form-group">
+        <label>實際包裝完成（<span id="pr-unit-label">箱</span>）</label>
+        <input type="number" id="pr-actual-units" placeholder="例：482" oninput="calcProduceYield()">
+      </div>
+      <div class="form-group">
+        <label>實際良品（顆，自動換算）</label>
+        <input type="number" id="pr-actual-pieces" readonly placeholder="—" style="background:var(--surface2);color:var(--text-3)">
+      </div>
+    </div>
+    <div id="pr-yield-display" style="margin-bottom:12px; font-size:13px; min-height:22px;"></div>
+    <hr class="divider">
+    <div class="card-title" style="margin-bottom:10px">原物料消耗（按批次預測 vs 實際）</div>
+    <div id="pr-materials-area">
+      <div class="empty" style="padding:12px">請先選擇產品</div>
+    </div>
+    <div class="form-group" style="margin-top:12px; margin-bottom:12px">
+      <label>備註</label>
+      <input type="text" id="pr-note" placeholder="選填，例：今日有一批因烤箱故障重做">
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="addProduceRecord()">新增生產記錄</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">近期生產記錄（最新 30 筆）</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>日期</th><th>產品</th><th>批次</th><th>預測（顆）</th><th>實際良品（顆）</th><th>入庫</th><th>良率</th><th>備註</th><th></th></tr></thead>
+        <tbody id="produce-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 出貨記錄 -->
+<div id="tab-daily-ship" class="section">
+  <div class="page-header">
+    <div class="page-title">出貨記錄</div>
+    <div class="page-sub">記錄每筆出貨的對象、數量、天氣與節假日資訊</div>
+  </div>
+  <div class="card">
+    <div class="card-title">新增出貨記錄</div>
+    <div class="form-grid">
+      <div class="form-group"><label>日期</label><input type="date" id="sh-date"></div>
+      <div class="form-group"><label>產品</label><select id="sh-product"></select></div>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>客戶公司</label>
+        <select id="sh-company" onchange="fillBranches()"></select>
+      </div>
+      <div class="form-group">
+        <label>分店（選填，不選則記為總公司）</label>
+        <select id="sh-branch"><option value="">── 總公司 ──</option></select>
+      </div>
+    </div>
+    <div class="form-grid-3">
+      <div class="form-group"><label>出貨數量</label><input type="number" id="sh-qty" placeholder="0" oninput="calcShipTotal()"></div>
+      <div class="form-group">
+        <label>折扣</label>
+        <select id="sh-discount" onchange="calcShipTotal()">
+          <option value="">── 自動套用 ──</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Credit 折抵（元）</label><input type="number" id="sh-credit" placeholder="0" oninput="calcShipTotal()"></div>
+    </div>
+    <div id="sh-total-preview" style="font-size:13px; color:var(--text-2); margin-bottom:12px;"></div>
+    <hr class="divider">
+    <div class="card-title" style="margin-bottom:12px">環境記錄</div>
+    <div class="form-grid-4">
+      <div class="form-group">
+        <label>天氣</label>
+        <select id="sh-weather">
+          <option value="">請選擇</option>
+          <option>☀️ 晴天</option><option>⛅ 多雲</option><option>🌧️ 雨天</option>
+          <option>🌩️ 颱風</option><option>❄️ 寒流</option>
+        </select>
+      </div>
+      <div class="form-group"><label>最高溫（°C）</label><input type="number" id="sh-high" placeholder="—"></div>
+      <div class="form-group"><label>最低溫（°C）</label><input type="number" id="sh-low" placeholder="—"></div>
+      <div class="form-group"><label>節假日備註</label><input type="text" id="sh-holiday" placeholder="例：中秋節"></div>
+    </div>
+    <button class="btn btn-primary" onclick="addShipRecord()">新增出貨記錄</button>
+  </div>
+  <div class="card">
+    <div class="card-title">近期出貨記錄（最新 30 筆）</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>日期</th><th>客戶／分店</th><th>產品</th><th>數量</th><th>折扣</th><th>金額</th><th>天氣</th><th></th></tr></thead>
+        <tbody id="ship-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 進貨記錄 -->
+<div id="tab-daily-purchase" class="section">
+  <div class="page-header">
+    <div class="page-title">進貨記錄</div>
+    <div class="page-sub">記錄原物料進貨，自動增加庫存</div>
+  </div>
+  <div class="card">
+    <div class="card-title">新增進貨記錄</div>
+    <div class="form-grid">
+      <div class="form-group"><label>日期</label><input type="date" id="pu-date"></div>
+      <div class="form-group"><label>供應商</label><select id="pu-supplier"></select></div>
+    </div>
+    <div class="form-grid">
+      <div class="form-group"><label>原物料</label><select id="pu-material"></select></div>
+      <div class="form-group"><label>進貨數量</label><input type="number" id="pu-qty" placeholder="0"></div>
+    </div>
+    <div class="form-group" style="margin-bottom:12px"><label>備註</label><input type="text" id="pu-note" placeholder="選填"></div>
+    <button class="btn btn-primary" onclick="addPurchaseRecord()">新增進貨記錄</button>
+  </div>
+  <div class="card">
+    <div class="card-title">近期進貨記錄（最新 30 筆）</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>日期</th><th>供應商</th><th>原物料</th><th>數量</th><th>備註</th><th></th></tr></thead>
+        <tbody id="purchase-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 產品設定 -->
+<div id="tab-products" class="section">
+  <div class="page-header">
+    <div class="page-title">產品設定</div>
+    <div class="page-sub">設定麵包品項、售價、批次良率、包裝換算與原料配方</div>
+  </div>
+  <div class="card">
+    <div class="card-title">新增產品</div>
+    <div class="form-grid">
+      <div class="form-group"><label>產品名稱</label><input type="text" id="p-name" placeholder="例：牛角可頌"></div>
+      <div class="form-group"><label>定價（元）</label><input type="number" id="p-price" placeholder="0"></div>
+    </div>
+    <hr class="divider">
+    <div class="card-title" style="margin-bottom:10px">批次與良率設定</div>
+    <div class="form-grid-3">
+      <div class="form-group">
+        <label>每批次預設產出（顆）</label>
+        <input type="number" id="p-batch-out" placeholder="例：696">
+      </div>
+      <div class="form-group">
+        <label>預設良率（%）</label>
+        <input type="number" id="p-yield" placeholder="例：92" min="0" max="100" step="0.1">
+      </div>
+      <div class="form-group">
+        <label>預設每批次良品數（自動計算）</label>
+        <input type="number" id="p-batch-good" placeholder="自動" readonly style="background:var(--surface2);color:var(--text-3)">
+      </div>
+    </div>
+    <hr class="divider">
+    <div class="card-title" style="margin-bottom:10px">包裝換算（庫存以此單位計算）</div>
+    <div class="form-grid-3">
+      <div class="form-group">
+        <label>包裝單位名稱</label>
+        <input type="text" id="p-unit" placeholder="例：箱、框、袋">
+      </div>
+      <div class="form-group">
+        <label>每包裝單位含幾顆</label>
+        <input type="number" id="p-unit-qty" placeholder="例：48" oninput="previewPackaging()">
+      </div>
+      <div class="form-group">
+        <label>低庫存警示量（包裝單位）</label>
+        <input type="number" id="p-min" placeholder="例：20">
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:12px">
+      <label>初始庫存（包裝單位）</label>
+      <input type="number" id="p-stock" placeholder="0">
+    </div>
+    <div id="p-packaging-preview" class="form-hint"></div>
+    <hr class="divider">
+    <div class="card-title" style="margin-bottom:10px">原料配方（每批次消耗量）</div>
+    <p class="form-hint" style="margin-bottom:10px">以批次為單位設定原料消耗，例如一批次使用 1 袋高筋麵粉</p>
+    <div id="p-recipe-area"></div>
+    <button class="btn btn-sm" onclick="addRecipeRow()" style="margin-bottom:12px">＋ 新增原料</button>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="addProduct()">新增產品</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">產品列表</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>產品</th><th>定價</th><th>批次產出</th><th>預設良率</th><th>包裝換算</th><th>警示量</th><th>配方</th><th></th></tr></thead>
+        <tbody id="products-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 原物料設定 -->
+<div id="tab-materials" class="section">
+  <div class="page-header">
+    <div class="page-title">原物料設定</div>
+    <div class="page-sub">設定原物料品項、單位與庫存警示</div>
+  </div>
+  <div class="card">
+    <div class="card-title">新增原物料</div>
+    <div class="form-grid">
+      <div class="form-group"><label>原料名稱</label><input type="text" id="m-name" placeholder="例：高筋麵粉"></div>
+      <div class="form-group"><label>單位</label><input type="text" id="m-unit" placeholder="例：袋、kg、公升"></div>
+    </div>
+    <div class="form-grid">
+      <div class="form-group"><label>初始庫存</label><input type="number" id="m-stock" placeholder="0"></div>
+      <div class="form-group"><label>低庫存警示量</label><input type="number" id="m-min" placeholder="5"></div>
+    </div>
+    <button class="btn btn-primary" onclick="addMaterial()">新增原物料</button>
+  </div>
+  <div class="card">
+    <div class="card-title">原物料列表</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>名稱</th><th>單位</th><th>目前庫存</th><th>警示量</th><th>狀態</th><th></th></tr></thead>
+        <tbody id="materials-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 客戶設定 -->
+<div id="tab-clients" class="section">
+  <div class="page-header">
+    <div class="page-title">客戶設定</div>
+    <div class="page-sub">設定客戶公司、折扣、分店與 Credit 帳戶</div>
+  </div>
+  <div class="subtabs">
+    <button class="subtab active" onclick="switchSubtab('clients','companies')">公司管理</button>
+    <button class="subtab" onclick="switchSubtab('clients','branches')">分店管理</button>
+    <button class="subtab" onclick="switchSubtab('clients','credits')">Credit 記帳</button>
+  </div>
+
+  <div id="sub-companies" class="subpanel active">
+    <div class="card">
+      <div class="card-title">新增公司</div>
+      <div class="form-grid">
+        <div class="form-group"><label>公司名稱</label><input type="text" id="co-name" placeholder="例：健康漢堡集團"></div>
+        <div class="form-group">
+          <label>公司折扣（%）</label>
+          <input type="number" id="co-discount" placeholder="例：10 = 九折" min="0" max="100">
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:12px"><label>備註</label><input type="text" id="co-note" placeholder="選填"></div>
+      <button class="btn btn-primary" onclick="addCompany()">新增公司</button>
+    </div>
+    <div class="card">
+      <div class="card-title">公司列表</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>公司名稱</th><th>折扣</th><th>分店數</th><th>備註</th><th></th></tr></thead>
+          <tbody id="companies-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="sub-branches" class="subpanel">
+    <div class="card">
+      <div class="card-title">新增分店</div>
+      <div class="form-grid">
+        <div class="form-group"><label>所屬公司</label><select id="br-company"></select></div>
+        <div class="form-group"><label>分店名稱</label><input type="text" id="br-name" placeholder="例：信義店"></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>分店特殊折扣（%，留空繼承公司折扣）</label>
+          <input type="number" id="br-discount" placeholder="留空 = 使用公司折扣" min="0" max="100">
+        </div>
+        <div class="form-group"><label>備註</label><input type="text" id="br-note" placeholder="選填"></div>
+      </div>
+      <button class="btn btn-primary" onclick="addBranch()">新增分店</button>
+    </div>
+    <div class="card">
+      <div class="card-title">分店列表</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>公司</th><th>分店</th><th>折扣來源</th><th>Credit 餘額</th><th></th></tr></thead>
+          <tbody id="branches-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="sub-credits" class="subpanel">
+    <div class="card">
+      <div class="card-title">新增 Credit（補償 / 退貨）</div>
+      <p class="form-hint">Credit 為累積補償點數，可在出貨時折抵金額。</p>
+      <div class="form-grid">
+        <div class="form-group"><label>所屬公司</label><select id="cr-company" onchange="fillCrBranches()"></select></div>
+        <div class="form-group"><label>分店（選填）</label><select id="cr-branch"><option value="">── 總公司 ──</option></select></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>金額（元）</label><input type="number" id="cr-amount" placeholder="0"></div>
+        <div class="form-group"><label>日期</label><input type="date" id="cr-date"></div>
+      </div>
+      <div class="form-group" style="margin-bottom:12px"><label>原因說明</label><input type="text" id="cr-reason" placeholder="例：2024/12/03 牛角破損退換貨補償"></div>
+      <button class="btn btn-primary" onclick="addCredit()">新增 Credit</button>
+    </div>
+    <div class="card">
+      <div class="card-title">Credit 記錄</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>日期</th><th>公司／分店</th><th>金額</th><th>類型</th><th>說明</th><th></th></tr></thead>
+          <tbody id="credits-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 供應商設定 -->
+<div id="tab-suppliers" class="section">
+  <div class="page-header">
+    <div class="page-title">供應商設定</div>
+    <div class="page-sub">管理原物料的進貨來源</div>
+  </div>
+  <div class="card">
+    <div class="card-title">新增供應商</div>
+    <div class="form-grid">
+      <div class="form-group"><label>供應商名稱</label><input type="text" id="sup-name" placeholder="例：台北麵粉廠"></div>
+      <div class="form-group"><label>聯絡資訊</label><input type="text" id="sup-contact" placeholder="電話或 Email，選填"></div>
+    </div>
+    <div class="form-group" style="margin-bottom:12px"><label>備註</label><input type="text" id="sup-note" placeholder="選填"></div>
+    <button class="btn btn-primary" onclick="addSupplier()">新增供應商</button>
+  </div>
+  <div class="card">
+    <div class="card-title">供應商列表</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>名稱</th><th>聯絡資訊</th><th>備註</th><th></th></tr></thead>
+        <tbody id="suppliers-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 出貨報表 -->
+<div id="tab-report" class="section">
+  <div class="page-header">
+    <div class="page-title">出貨報表</div>
+    <div class="page-sub">依期間、客戶、產品分析出貨數量與金額</div>
+  </div>
+  <div class="card">
+    <div class="card-title">篩選條件</div>
+    <div class="form-grid-4">
+      <div class="form-group"><label>開始日期</label><input type="date" id="rpt-start"></div>
+      <div class="form-group"><label>結束日期</label><input type="date" id="rpt-end"></div>
+      <div class="form-group">
+        <label>客戶公司（全部）</label>
+        <select id="rpt-company">
+          <option value="">全部公司</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>產品（全部）</label>
+        <select id="rpt-product">
+          <option value="">全部產品</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="generateReport()">產生報表</button>
+  </div>
+  <div id="report-output"></div>
+</div>
+
+<!-- 庫存報表 -->
+<div id="tab-stock-report" class="section">
+  <div class="page-header">
+    <div class="page-title">庫存報表</div>
+    <div class="page-sub">目前庫存總覽與歷史變化</div>
+  </div>
+  <div class="card">
+    <div class="card-title">產品庫存</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>產品</th><th>單位</th><th>目前庫存</th><th>警示量</th><th>狀態</th></tr></thead>
+        <tbody id="stock-products-body"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">原物料庫存</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>原料</th><th>單位</th><th>目前庫存</th><th>警示量</th><th>狀態</th></tr></thead>
+        <tbody id="stock-materials-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 資料同步 -->
+<div id="tab-sync" class="section">
+  <div class="page-header">
+    <div class="page-title">資料同步</div>
+    <div class="page-sub">匯出資料碼分享給團隊，或從備份還原</div>
+  </div>
+  <div class="info-box">📋 由一人按「複製資料碼」，透過 LINE 或 Email 傳給其他人，其他人貼上後選擇匯入方式即可同步。</div>
+  <div class="card">
+    <div class="card-title">匯出資料</div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="exportData()">複製資料碼</button>
+      <button class="btn" onclick="downloadData()">下載備份檔（.json）</button>
+    </div>
+    <div id="export-box" style="margin-top:14px; display:none">
+      <textarea id="export-text" readonly></textarea>
+      <div class="alert alert-success" style="display:block">已複製到剪貼簿！</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">匯入資料</div>
+    <div class="form-group" style="margin-bottom:12px">
+      <label>貼上資料碼</label>
+      <textarea id="import-text" placeholder="將資料碼貼在這裡..."></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="importData('merge')">合併匯入</button>
+      <button class="btn" onclick="importData('replace')">覆蓋匯入</button>
+    </div>
+    <div class="alert alert-success" id="import-ok"></div>
+    <div class="alert alert-error" id="import-err"></div>
+  </div>
+</div>
+
+<!-- 變更日誌 -->
+<div id="tab-changelog" class="section">
+  <div class="page-header">
+    <div class="page-title">產品變更日誌</div>
+    <div class="page-sub">自動記錄產品建立與每次配方、設定的變更歷史</div>
+  </div>
+  <div class="card">
+    <div class="card-title">篩選</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>產品</label>
+        <select id="cl-filter-product" onchange="renderChangelog()">
+          <option value="">全部產品</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>類型</label>
+        <select id="cl-filter-type" onchange="renderChangelog()">
+          <option value="">全部</option>
+          <option value="create">建立</option>
+          <option value="edit">變更</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div id="changelog-list"></div>
+</div>
+
+</main>
+</div>
+
+<!-- ══════════════════════════════════════
+     EDIT MODALS
+════════════════════════════════════════ -->
+
+<!-- Edit Product Modal -->
+<div id="modal-product" class="modal-overlay" onclick="if(event.target===this)closeModal('product')">
+  <div class="modal">
+    <div class="modal-title">編輯產品</div>
+    <div class="form-grid">
+      <div class="form-group"><label>產品名稱</label><input type="text" id="ep-name"></div>
+      <div class="form-group"><label>定價（元）</label><input type="number" id="ep-price"></div>
+    </div>
+    <hr class="divider">
+    <div class="card-title" style="margin-bottom:10px">批次與良率</div>
+    <div class="form-grid-3">
+      <div class="form-group"><label>每批次產出（顆）</label><input type="number" id="ep-batch-out" oninput="epCalcGood()"></div>
+      <div class="form-group"><label>預設良率（%）</label><input type="number" id="ep-yield" oninput="epCalcGood()"></div>
+      <div class="form-group"><label>預設良品數（自動）</label><input type="number" id="ep-batch-good" readonly style="background:var(--surface2);color:var(--text-3)"></div>
+    </div>
+    <hr class="divider">
+    <div class="card-title" style="margin-bottom:10px">包裝換算</div>
+    <div class="form-grid-3">
+      <div class="form-group"><label>包裝單位名稱</label><input type="text" id="ep-unit"></div>
+      <div class="form-group"><label>每包裝幾顆</label><input type="number" id="ep-unit-qty"></div>
+      <div class="form-group"><label>低庫存警示量</label><input type="number" id="ep-min"></div>
+    </div>
+    <div class="form-group" style="margin-bottom:12px"><label>初始庫存</label><input type="number" id="ep-stock"></div>
+    <hr class="divider">
+    <div class="card-title" style="margin-bottom:8px">原料配方（每批次）</div>
+    <div id="ep-recipe-area"></div>
+    <button class="btn btn-sm" onclick="epAddRecipeRow()" style="margin-bottom:14px">＋ 新增原料</button>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveEditProduct()">儲存</button>
+      <button class="btn" onclick="closeModal('product')">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Material Modal -->
+<div id="modal-material" class="modal-overlay" onclick="if(event.target===this)closeModal('material')">
+  <div class="modal">
+    <div class="modal-title">編輯原物料</div>
+    <div class="form-grid">
+      <div class="form-group"><label>原料名稱</label><input type="text" id="em-name"></div>
+      <div class="form-group"><label>單位</label><input type="text" id="em-unit"></div>
+    </div>
+    <div class="form-grid">
+      <div class="form-group"><label>初始庫存</label><input type="number" id="em-stock"></div>
+      <div class="form-group"><label>低庫存警示量</label><input type="number" id="em-min"></div>
+    </div>
+    <div class="btn-row" style="margin-top:4px">
+      <button class="btn btn-primary" onclick="saveEditMaterial()">儲存</button>
+      <button class="btn" onclick="closeModal('material')">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Supplier Modal -->
+<div id="modal-supplier" class="modal-overlay" onclick="if(event.target===this)closeModal('supplier')">
+  <div class="modal">
+    <div class="modal-title">編輯供應商</div>
+    <div class="form-grid">
+      <div class="form-group"><label>供應商名稱</label><input type="text" id="esup-name"></div>
+      <div class="form-group"><label>聯絡資訊</label><input type="text" id="esup-contact"></div>
+    </div>
+    <div class="form-group" style="margin-bottom:14px"><label>備註</label><input type="text" id="esup-note"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveEditSupplier()">儲存</button>
+      <button class="btn" onclick="closeModal('supplier')">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Company Modal -->
+<div id="modal-company" class="modal-overlay" onclick="if(event.target===this)closeModal('company')">
+  <div class="modal">
+    <div class="modal-title">編輯公司</div>
+    <div class="form-grid">
+      <div class="form-group"><label>公司名稱</label><input type="text" id="eco-name"></div>
+      <div class="form-group"><label>公司折扣（%）</label><input type="number" id="eco-discount" min="0" max="100"></div>
+    </div>
+    <div class="form-group" style="margin-bottom:14px"><label>備註</label><input type="text" id="eco-note"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveEditCompany()">儲存</button>
+      <button class="btn" onclick="closeModal('company')">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Branch Modal -->
+<div id="modal-branch" class="modal-overlay" onclick="if(event.target===this)closeModal('branch')">
+  <div class="modal">
+    <div class="modal-title">編輯分店</div>
+    <div class="form-grid">
+      <div class="form-group"><label>所屬公司</label><select id="ebr-company"></select></div>
+      <div class="form-group"><label>分店名稱</label><input type="text" id="ebr-name"></div>
+    </div>
+    <div class="form-grid">
+      <div class="form-group"><label>分店特殊折扣（%，留空繼承公司）</label><input type="number" id="ebr-discount" min="0" max="100"></div>
+      <div class="form-group"><label>備註</label><input type="text" id="ebr-note"></div>
+    </div>
+    <div class="btn-row" style="margin-top:4px">
+      <button class="btn btn-primary" onclick="saveEditBranch()">儲存</button>
+      <button class="btn" onclick="closeModal('branch')">取消</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════
+//  DATA STORE
+// ════════════════════════════════════════
+let db = {
+  products: [],      // {id, name, unit, price, minStock, initialStock, recipe:[{materialId, perUnit}]}
+  materials: [],     // {id, name, unit, initialStock, minStock}
+  companies: [],     // {id, name, discountPct, note}
+  branches: [],      // {id, companyId, name, discountPct (null=inherit), note}
+  suppliers: [],     // {id, name, contact, note}
+  produceRecords: [], // {id, date, productId, qty, note, materialUsage:[{materialId, predicted, actual}]}
+  shipRecords: [],   // {id, date, productId, companyId, branchId, qty, discountPct, creditUsed, finalAmount, weather, tempHigh, tempLow, holiday}
+  purchaseRecords: [],// {id, date, supplierId, materialId, qty, note}
+  creditRecords: [], // {id, date, companyId, branchId, amount, type:'add'|'use', reason}
+  productChangelog: [], // {id, ts, date, productId, productName, type:'create'|'edit', snapshot, diffs:[{field,label,oldVal,newVal}]}
+};
+
+function load() {
+  try { const d = JSON.parse(localStorage.getItem('bms_v2')||'{}'); if(d.products) db = {...db,...d}; } catch(e) {}
+}
+
+function save() {
+  localStorage.setItem('bms_v2', JSON.stringify(db));
+}
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+// ════════════════════════════════════════
+//  STOCK CALCULATIONS
+// ════════════════════════════════════════
+function getProductStock(pid) {
+  // Stock stored and returned in packaging units
+  const p = db.products.find(x=>x.id===pid); if(!p) return 0;
+  let s = p.initialStock||0;
+  db.produceRecords.filter(r=>r.productId===pid).forEach(r=>s+=(r.actualUnits||0));
+  db.shipRecords.filter(r=>r.productId===pid).forEach(r=>s-=r.qty||0);
+  return s;
+}
+
+function getMaterialStock(mid) {
+  const m = db.materials.find(x=>x.id===mid); if(!m) return 0;
+  let s = m.initialStock||0;
+  db.purchaseRecords.filter(r=>r.materialId===mid).forEach(r=>s+=r.qty||0);
+  db.produceRecords.forEach(r=>{
+    (r.materialUsage||[]).forEach(u=>{ if(u.materialId===mid) s-=(u.actual??u.predicted??0); });
+  });
+  return s;
+}
+
+function getCompanyCredit(companyId, branchId) {
+  return db.creditRecords
+    .filter(r=>r.companyId===companyId && (branchId ? r.branchId===branchId : !r.branchId))
+    .reduce((s,r)=> r.type==='add' ? s+r.amount : s-r.amount, 0);
+}
+
+function getEffectiveDiscount(companyId, branchId) {
+  const co = db.companies.find(x=>x.id===companyId);
+  if(!co) return 0;
+  if(branchId) {
+    const br = db.branches.find(x=>x.id===branchId);
+    if(br && br.discountPct!=null && br.discountPct!=='') return parseFloat(br.discountPct);
+  }
+  return parseFloat(co.discountPct)||0;
+}
+
+// ════════════════════════════════════════
+//  NAVIGATION
+// ════════════════════════════════════════
+function go(tab) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>{ if(b.getAttribute('onclick')===`go('${tab}')`) b.classList.add('active'); });
+  // Close mobile drawer
+  closeDrawer();
+  // Render on switch
+  const renders = {
+    'dashboard': renderDashboard,
+    'suggest': ()=>{},
+    'daily-produce': ()=>{ renderProduceRecords(); populateProductSelects(); },
+    'daily-ship': ()=>{ renderShipRecords(); populateShipSelects(); },
+    'daily-purchase': ()=>{ renderPurchaseRecords(); populatePurchaseSelects(); },
+    'products': ()=>{ renderProducts(); populateRecipeDropdowns(); },
+    'materials': renderMaterials,
+    'clients': ()=>{ renderCompanies(); renderBranches(); renderCredits(); populateClientSelects(); },
+    'suppliers': renderSuppliers,
+    'report': ()=>{ setReportDefaults(); populateReportFilters(); },
+    'stock-report': renderStockReport,
+    'changelog': ()=>{ populateChangelogFilter(); renderChangelog(); },
+    'sync': ()=>{},
+  };
+  if(renders[tab]) renders[tab]();
+}
+
+function switchSubtab(page, sub) {
+  document.querySelectorAll(`#tab-${page} .subtab`).forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll(`#tab-${page} .subpanel`).forEach(p=>p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('sub-'+sub).classList.add('active');
+}
+
+// ════════════════════════════════════════
+//  DASHBOARD
+// ════════════════════════════════════════
+function renderDashboard() {
+  const today = new Date().toISOString().slice(0,10);
+  const todayShips = db.shipRecords.filter(r=>r.date===today);
+  const todayProduce = db.produceRecords.filter(r=>r.date===today);
+  const totalShipQty = todayShips.reduce((s,r)=>s+r.qty,0);
+  const totalShipAmt = todayShips.reduce((s,r)=>s+r.finalAmount,0);
+  const totalProduced = todayProduce.reduce((s,r)=>s+(r.actualUnits||0),0);
+  const totalProducedPieces = todayProduce.reduce((s,r)=>s+(r.actualPieces||0),0);
+  const lowProducts = db.products.filter(p=>getProductStock(p.id)<=p.minStock).length;
+  const lowMaterials = db.materials.filter(m=>getMaterialStock(m.id)<=m.minStock).length;
+
+  document.getElementById('dash-metrics').innerHTML = `
+    <div class="metric"><div class="metric-label">今日入庫（包裝）</div><div class="metric-value">${totalProduced.toLocaleString()}</div><div class="metric-hint">${totalProducedPieces.toLocaleString()} 顆</div></div>
+    <div class="metric"><div class="metric-label">今日出貨（件）</div><div class="metric-value">${totalShipQty.toLocaleString()}</div></div>
+    <div class="metric"><div class="metric-label">今日出貨金額</div><div class="metric-value">$${totalShipAmt.toLocaleString()}</div></div>
+    <div class="metric"><div class="metric-label">產品低庫存</div><div class="metric-value ${lowProducts>0?'warn':'success'}">${lowProducts}</div></div>
+    <div class="metric"><div class="metric-label">原料低庫存</div><div class="metric-value ${lowMaterials>0?'warn':'success'}">${lowMaterials}</div></div>
+  `;
+
+  document.getElementById('dash-product-stock').innerHTML = db.products.length
+    ? db.products.map(p=>{ const s=getProductStock(p.id); const cls=s<=0?'badge-empty':s<=p.minStock?'badge-low':'badge-ok'; const lbl=s<=0?'缺貨':s<=p.minStock?'偏低':'正常';
+      return `<tr><td>${p.name}</td><td class="mono">${s} ${p.unit}</td><td class="mono">${p.minStock}</td><td><span class="badge ${cls}">${lbl}</span></td></tr>`; }).join('')
+    : '<tr><td colspan="4"><div class="empty">尚無產品</div></td></tr>';
+
+  document.getElementById('dash-material-stock').innerHTML = db.materials.length
+    ? db.materials.map(m=>{ const s=getMaterialStock(m.id); const cls=s<=0?'badge-empty':s<=m.minStock?'badge-low':'badge-ok'; const lbl=s<=0?'缺料':s<=m.minStock?'偏低':'正常';
+      return `<tr><td>${m.name}</td><td class="mono">${s} ${m.unit}</td><td class="mono">${m.minStock}</td><td><span class="badge ${cls}">${lbl}</span></td></tr>`; }).join('')
+    : '<tr><td colspan="4"><div class="empty">尚無原料</div></td></tr>';
+
+  document.getElementById('dash-today-ships').innerHTML = todayShips.length
+    ? todayShips.map(r=>{ const p=db.products.find(x=>x.id===r.productId); const co=db.companies.find(x=>x.id===r.companyId); const br=r.branchId?db.branches.find(x=>x.id===r.branchId):null;
+      return `<tr><td>${co?co.name:'—'}${br?` / ${br.name}`:''}</td><td>${p?p.name:'—'}</td><td class="mono">${r.qty}</td><td class="mono">${r.discountPct}%</td><td class="mono">$${r.finalAmount.toLocaleString()}</td><td class="mono">${r.creditUsed>0?`-$${r.creditUsed}`:'—'}</td></tr>`; }).join('')
+    : '<tr><td colspan="6"><div class="empty">今日尚無出貨</div></td></tr>';
+}
+
+// ════════════════════════════════════════
+//  PRODUCTION SUGGESTION
+// ════════════════════════════════════════
+function generateSuggestion() {
+  const weather = document.getElementById('sug-weather').value;
+  const high = parseFloat(document.getElementById('sug-high').value)||null;
+  const low = parseFloat(document.getElementById('sug-low').value)||null;
+  const holiday = document.getElementById('sug-holiday').value.trim();
+
+  if(!db.shipRecords.length) {
+    document.getElementById('suggestion-output').innerHTML = '<div class="info-box">尚無足夠的歷史出貨資料，請先記錄至少一週的出貨後再使用此功能。</div>';
+    return;
+  }
+
+  const today = new Date();
+  const todayDow = today.getDay(); // 0=Sun
+  const suggestions = db.products.map(p=>{
+    const allShips = db.shipRecords.filter(r=>r.productId===p.id);
+    if(!allShips.length) return null;
+
+    // Base: same weekday average
+    const sameDow = allShips.filter(r=>new Date(r.date).getDay()===todayDow);
+    const baseAvg = sameDow.length ? sameDow.reduce((s,r)=>s+r.qty,0)/sameDow.length : allShips.reduce((s,r)=>s+r.qty,0)/allShips.length;
+
+    // Weather adjustment
+    let weatherMult = 1;
+    if(weather === '🌧️ 雨天' || weather === '🌩️ 颱風') {
+      const rainShips = allShips.filter(r=>r.weather===weather);
+      if(rainShips.length>=3) {
+        const rainAvg = rainShips.reduce((s,r)=>s+r.qty,0)/rainShips.length;
+        weatherMult = rainAvg / (allShips.reduce((s,r)=>s+r.qty,0)/allShips.length);
+      } else weatherMult = 0.8;
+    } else if(weather === '❄️ 寒流') weatherMult = 0.9;
+
+    // Holiday adjustment
+    let holidayMult = 1;
+    if(holiday) {
+      const holidayShips = allShips.filter(r=>r.holiday&&r.holiday.trim());
+      if(holidayShips.length>=2) {
+        const hAvg = holidayShips.reduce((s,r)=>s+r.qty,0)/holidayShips.length;
+        holidayMult = hAvg / (allShips.reduce((s,r)=>s+r.qty,0)/allShips.length);
+      } else holidayMult = 1.15;
+    }
+
+    const rawSuggested = Math.ceil(baseAvg * weatherMult * holidayMult);
+    const currentStock = getProductStock(p.id);
+    const needed = Math.max(0, rawSuggested - currentStock);
+
+    return { p, rawSuggested, currentStock, needed };
+  }).filter(Boolean);
+
+  const materialNeeds = {};
+  suggestions.forEach(({p, needed})=>{
+    if(needed<=0) return;
+    const unitQty = p.unitQty||1;
+    const batchOutput = p.batchOutput||0;
+    const yieldPct = p.defaultYieldPct||100;
+    const piecesPerBatch = Math.round(batchOutput * yieldPct/100);
+    const batches = piecesPerBatch>0 ? Math.ceil(needed*unitQty/piecesPerBatch) : 0;
+    (p.recipe||[]).forEach(r=>{
+      const perBatch = r.perBatch||r.perUnit||0;
+      materialNeeds[r.materialId] = (materialNeeds[r.materialId]||0) + batches * perBatch;
+    });
+  });
+
+  const materialWarnings = Object.entries(materialNeeds).map(([mid, needed])=>{
+    const m = db.materials.find(x=>x.id===mid); if(!m) return null;
+    const stock = getMaterialStock(mid);
+    if(stock < needed) return `⚠️ ${m.name} 預計需要 ${needed.toFixed(1)} ${m.unit}，但庫存只有 ${stock} ${m.unit}`;
+    return null;
+  }).filter(Boolean);
+
+  let html = '<div class="suggestion-box"><h4>建議生產量</h4>';
+  html += suggestions.map(({p, rawSuggested, currentStock, needed})=>{
+    const unitQty = p.unitQty||1;
+    const batchOutput = p.batchOutput||0;
+    const yieldPct = p.defaultYieldPct||100;
+    // rawSuggested & needed are in packaging units
+    // Convert needed units → pieces → batches
+    const neededPieces = Math.ceil(needed * unitQty);
+    const piecesPerBatch = Math.round(batchOutput * yieldPct/100);
+    const batches = piecesPerBatch>0 ? Math.ceil(neededPieces/piecesPerBatch) : '—';
+    return `
+    <div class="suggestion-row">
+      <span>${p.name}</span>
+      <span class="suggestion-val">預測需求 ${rawSuggested} ${p.unit}｜庫存 ${currentStock} ${p.unit}｜建議生產 ${needed} ${p.unit}（≈ ${batches} 批次）</span>
+    </div>`;
+  }).join('');
+  html += '</div>';
+
+  if(materialWarnings.length) {
+    html += '<div class="warn-box"><strong>原料庫存警告</strong><br>' + materialWarnings.join('<br>') + '</div>';
+  }
+
+  document.getElementById('suggestion-output').innerHTML = html;
+}
+
+// ════════════════════════════════════════
+//  PRODUCTS
+// ════════════════════════════════════════
+let recipeRows = [];
+
+// Auto-calc predicted good pieces from batch output × yield
+document.addEventListener('DOMContentLoaded', ()=>{
+  ['p-batch-out','p-yield'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.addEventListener('input', ()=>{
+      const out = parseFloat(document.getElementById('p-batch-out').value)||0;
+      const yld = parseFloat(document.getElementById('p-yield').value)||0;
+      const good = out&&yld ? Math.round(out * yld/100) : '';
+      document.getElementById('p-batch-good').value = good;
+      previewPackaging();
+    });
+  });
+});
+
+function previewPackaging() {
+  const unitQty = parseFloat(document.getElementById('p-unit-qty').value)||0;
+  const unit = document.getElementById('p-unit').value||'箱';
+  const out = parseFloat(document.getElementById('p-batch-out').value)||0;
+  const yld = parseFloat(document.getElementById('p-yield').value)||0;
+  const good = out&&yld ? Math.round(out * yld/100) : 0;
+  const preview = document.getElementById('p-packaging-preview');
+  if(unitQty && good) {
+    const boxes = (good/unitQty).toFixed(2);
+    preview.textContent = `預設良率下，每批次約可包裝 ${boxes} ${unit}（${good} 顆 ÷ ${unitQty} 顆/${unit}）`;
+  } else preview.textContent = '';
+}
+
+function addRecipeRow() {
+  const id = uid();
+  recipeRows.push(id);
+  const area = document.getElementById('p-recipe-area');
+  const opts = db.materials.map(m=>`<option value="${m.id}">${m.name}（${m.unit}）</option>`).join('');
+  const div = document.createElement('div');
+  div.id = 'recipe-row-'+id;
+  div.className = 'form-grid';
+  div.style.marginBottom='8px';
+  div.innerHTML = `
+    <div class="form-group"><label>原料</label><select id="rec-mat-${id}">${opts||'<option>請先新增原料</option>'}</select></div>
+    <div style="display:flex;gap:8px;align-items:flex-end">
+      <div class="form-group" style="flex:1"><label>每批次消耗量</label><input type="number" id="rec-qty-${id}" placeholder="0" step="0.01"></div>
+      <button class="btn btn-danger btn-sm" onclick="removeRecipeRow('${id}')" style="margin-bottom:0;height:34px">移除</button>
+    </div>`;
+  area.appendChild(div);
+}
+
+function removeRecipeRow(id) {
+  recipeRows = recipeRows.filter(r=>r!==id);
+  const el = document.getElementById('recipe-row-'+id);
+  if(el) el.remove();
+}
+
+function addProduct() {
+  const name = document.getElementById('p-name').value.trim();
+  if(!name) return alert('請輸入產品名稱');
+  const batchOutput = parseFloat(document.getElementById('p-batch-out').value)||0;
+  const defaultYieldPct = parseFloat(document.getElementById('p-yield').value)||0;
+  const unitQty = parseFloat(document.getElementById('p-unit-qty').value)||1;
+  const recipe = recipeRows.map(id=>({
+    materialId: document.getElementById('rec-mat-'+id)?.value,
+    perBatch: parseFloat(document.getElementById('rec-qty-'+id)?.value)||0,
+  })).filter(r=>r.materialId&&r.perBatch>0);
+
+  const newProduct = {
+    id: uid(), name,
+    unit: document.getElementById('p-unit').value||'箱',
+    unitQty,
+    price: parseFloat(document.getElementById('p-price').value)||0,
+    initialStock: parseFloat(document.getElementById('p-stock').value)||0,
+    minStock: parseFloat(document.getElementById('p-min').value)||20,
+    batchOutput,
+    defaultYieldPct,
+    recipe,
+  };
+  db.products.push(newProduct);
+
+  // Record creation changelog
+  recordProductSnapshot(newProduct, 'create');
+
+  save();
+  ['p-name','p-unit','p-unit-qty','p-price','p-stock','p-min','p-batch-out','p-yield','p-batch-good'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('p-recipe-area').innerHTML='';
+  document.getElementById('p-packaging-preview').textContent='';
+  recipeRows=[];
+  renderProducts();
+}
+
+function renderProducts() {
+  document.getElementById('products-body').innerHTML = db.products.length
+    ? db.products.map(p=>{
+        const recipeTags = (p.recipe||[]).map(r=>{ const m=db.materials.find(x=>x.id===r.materialId); return m?`<span class="tag">${m.name} ×${r.perBatch||r.perUnit}</span>`:''; }).join('');
+        const yieldInfo = p.batchOutput ? `${p.batchOutput} 顆/批` : '—';
+        const packInfo = p.unitQty ? `1 ${p.unit} = ${p.unitQty} 顆` : '—';
+        return `<tr><td>${p.name}</td><td class="mono">$${p.price.toLocaleString()}</td><td class="mono">${yieldInfo}</td><td class="mono">${p.defaultYieldPct||'—'}%</td><td class="text-2">${packInfo}</td><td class="mono">${p.minStock} ${p.unit}</td><td>${recipeTags||'—'}</td>
+          <td><div class="btn-row"><button class="btn btn-sm" onclick="openEditProduct('${p.id}')">編輯</button><button class="btn btn-sm" onclick="copyProduct('${p.id}')">複製</button><button class="btn btn-danger" onclick="deleteProduct('${p.id}')">刪除</button></div></td></tr>`;
+      }).join('')
+    : '<tr><td colspan="8"><div class="empty">尚無產品</div></td></tr>';
+}
+
+function deleteProduct(id) {
+  if(!confirm('確定刪除此產品？')) return;
+  db.products = db.products.filter(p=>p.id!==id);
+  save(); renderProducts();
+}
+
+function populateRecipeDropdowns() {}
+
+// ════════════════════════════════════════
+//  MATERIALS
+// ════════════════════════════════════════
+function addMaterial() {
+  const name = document.getElementById('m-name').value.trim();
+  if(!name) return alert('請輸入原料名稱');
+  db.materials.push({ id:uid(), name, unit:document.getElementById('m-unit').value||'袋',
+    initialStock:parseFloat(document.getElementById('m-stock').value)||0,
+    minStock:parseFloat(document.getElementById('m-min').value)||5 });
+  save();
+  ['m-name','m-unit','m-stock','m-min'].forEach(id=>document.getElementById(id).value='');
+  renderMaterials();
+}
+
+function renderMaterials() {
+  document.getElementById('materials-body').innerHTML = db.materials.length
+    ? db.materials.map(m=>{ const s=getMaterialStock(m.id); const cls=s<=0?'badge-empty':s<=m.minStock?'badge-low':'badge-ok'; const lbl=s<=0?'缺料':s<=m.minStock?'偏低':'正常';
+        return `<tr><td>${m.name}</td><td>${m.unit}</td><td class="mono">${s}</td><td class="mono">${m.minStock}</td><td><span class="badge ${cls}">${lbl}</span></td>
+          <td><div class="btn-row"><button class="btn btn-sm" onclick="openEditMaterial('${m.id}')">編輯</button><button class="btn btn-danger" onclick="deleteMaterial('${m.id}')">刪除</button></div></td></tr>`; }).join('')
+    : '<tr><td colspan="6"><div class="empty">尚無原物料</div></td></tr>';
+}
+
+function deleteMaterial(id) {
+  if(!confirm('確定刪除此原物料？')) return;
+  db.materials = db.materials.filter(m=>m.id!==id);
+  save(); renderMaterials();
+}
+
+// ════════════════════════════════════════
+//  SUPPLIERS
+// ════════════════════════════════════════
+function addSupplier() {
+  const name = document.getElementById('sup-name').value.trim();
+  if(!name) return alert('請輸入供應商名稱');
+  db.suppliers.push({ id:uid(), name, contact:document.getElementById('sup-contact').value.trim(), note:document.getElementById('sup-note').value.trim() });
+  save();
+  ['sup-name','sup-contact','sup-note'].forEach(id=>document.getElementById(id).value='');
+  renderSuppliers();
+}
+
+function renderSuppliers() {
+  document.getElementById('suppliers-body').innerHTML = db.suppliers.length
+    ? db.suppliers.map(s=>`<tr><td>${s.name}</td><td class="text-2">${s.contact||'—'}</td><td class="text-2">${s.note||'—'}</td>
+        <td><div class="btn-row"><button class="btn btn-sm" onclick="openEditSupplier('${s.id}')">編輯</button><button class="btn btn-danger" onclick="deleteSupplier('${s.id}')">刪除</button></div></td></tr>`).join('')
+    : '<tr><td colspan="4"><div class="empty">尚無供應商</div></td></tr>';
+}
+
+function deleteSupplier(id) {
+  if(!confirm('確定刪除？')) return;
+  db.suppliers = db.suppliers.filter(s=>s.id!==id);
+  save(); renderSuppliers();
+}
+
+// ════════════════════════════════════════
+//  CLIENTS — COMPANIES
+// ════════════════════════════════════════
+function addCompany() {
+  const name = document.getElementById('co-name').value.trim();
+  if(!name) return alert('請輸入公司名稱');
+  db.companies.push({ id:uid(), name, discountPct:parseFloat(document.getElementById('co-discount').value)||0, note:document.getElementById('co-note').value.trim() });
+  save();
+  ['co-name','co-discount','co-note'].forEach(id=>document.getElementById(id).value='');
+  renderCompanies(); populateClientSelects();
+}
+
+function renderCompanies() {
+  document.getElementById('companies-body').innerHTML = db.companies.length
+    ? db.companies.map(c=>{ const bCount=db.branches.filter(b=>b.companyId===c.id).length;
+        return `<tr><td><span class="badge badge-parent">${c.name}</span></td><td class="mono">${c.discountPct}%</td><td class="mono">${bCount}</td><td class="text-2">${c.note||'—'}</td>
+          <td><div class="btn-row"><button class="btn btn-sm" onclick="openEditCompany('${c.id}')">編輯</button><button class="btn btn-danger" onclick="deleteCompany('${c.id}')">刪除</button></div></td></tr>`; }).join('')
+    : '<tr><td colspan="5"><div class="empty">尚無公司</div></td></tr>';
+}
+
+function deleteCompany(id) {
+  if(!confirm('確定刪除？分店與相關資料也會一併移除。')) return;
+  db.companies = db.companies.filter(c=>c.id!==id);
+  db.branches = db.branches.filter(b=>b.companyId!==id);
+  save(); renderCompanies(); renderBranches();
+}
+
+// ════════════════════════════════════════
+//  CLIENTS — BRANCHES
+// ════════════════════════════════════════
+function addBranch() {
+  const companyId = document.getElementById('br-company').value;
+  const name = document.getElementById('br-name').value.trim();
+  if(!companyId||!name) return alert('請選擇公司並輸入分店名稱');
+  const discVal = document.getElementById('br-discount').value;
+  db.branches.push({ id:uid(), companyId, name,
+    discountPct: discVal===''||discVal===null ? null : parseFloat(discVal),
+    note: document.getElementById('br-note').value.trim() });
+  save();
+  ['br-name','br-discount','br-note'].forEach(id=>document.getElementById(id).value='');
+  renderBranches();
+}
+
+function renderBranches() {
+  document.getElementById('branches-body').innerHTML = db.branches.length
+    ? db.branches.map(b=>{ const co=db.companies.find(x=>x.id===b.companyId); const credit=getCompanyCredit(b.companyId,b.id);
+        const discLabel = b.discountPct!=null && b.discountPct!=='' ? `${b.discountPct}% <span class="text-3">（分店特殊）</span>` : `${co?co.discountPct:0}% <span class="text-3">（繼承公司）</span>`;
+        return `<tr><td><span class="badge badge-parent">${co?co.name:'—'}</span></td><td><span class="badge badge-branch">${b.name}</span></td><td class="mono">${discLabel}</td><td><span class="credit-chip">$${credit.toLocaleString()}</span></td>
+          <td><div class="btn-row"><button class="btn btn-sm" onclick="openEditBranch('${b.id}')">編輯</button><button class="btn btn-danger" onclick="deleteBranch('${b.id}')">刪除</button></div></td></tr>`; }).join('')
+    : '<tr><td colspan="5"><div class="empty">尚無分店</div></td></tr>';
+}
+
+function deleteBranch(id) {
+  if(!confirm('確定刪除？')) return;
+  db.branches = db.branches.filter(b=>b.id!==id);
+  save(); renderBranches();
+}
+
+// ════════════════════════════════════════
+//  CLIENTS — CREDITS
+// ════════════════════════════════════════
+function fillCrBranches() {
+  const companyId = document.getElementById('cr-company').value;
+  const brs = db.branches.filter(b=>b.companyId===companyId);
+  document.getElementById('cr-branch').innerHTML = '<option value="">── 總公司 ──</option>' +
+    brs.map(b=>`<option value="${b.id}">${b.name}</option>`).join('');
+}
+
+function addCredit() {
+  const companyId = document.getElementById('cr-company').value;
+  const branchId = document.getElementById('cr-branch').value;
+  const amount = parseFloat(document.getElementById('cr-amount').value)||0;
+  const date = document.getElementById('cr-date').value;
+  const reason = document.getElementById('cr-reason').value.trim();
+  if(!companyId||!date||amount<=0) return alert('請填寫完整資訊');
+  db.creditRecords.push({ id:uid(), date, companyId, branchId, amount, type:'add', reason });
+  save();
+  ['cr-amount','cr-reason'].forEach(id=>document.getElementById(id).value='');
+  renderCredits(); renderBranches();
+}
+
+function deleteCredit(id) {
+  if(!confirm('確定刪除此 Credit 記錄？')) return;
+  db.creditRecords = db.creditRecords.filter(r=>r.id!==id);
+  save(); renderCredits(); renderBranches();
+}
+
+function renderCredits() {
+  document.getElementById('credits-body').innerHTML = db.creditRecords.length
+    ? [...db.creditRecords].sort((a,b)=>b.date.localeCompare(a.date)).map(r=>{ const co=db.companies.find(x=>x.id===r.companyId); const br=r.branchId?db.branches.find(x=>x.id===r.branchId):null;
+        return `<tr><td>${r.date}</td><td>${co?co.name:'—'}${br?` / ${br.name}`:''}</td><td class="mono pos">+$${r.amount.toLocaleString()}</td><td>${r.type==='add'?'補償':'折抵'}</td><td class="text-2">${r.reason||'—'}</td><td><button class="btn btn-danger" onclick="deleteCredit('${r.id}')">刪除</button></td></tr>`; }).join('')
+    : '<tr><td colspan="6"><div class="empty">尚無 Credit 記錄</div></td></tr>';
+}
+
+// ════════════════════════════════════════
+//  POPULATE SELECTS
+// ════════════════════════════════════════
+function populateClientSelects() {
+  const coOpts = db.companies.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+  ['br-company','cr-company'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=coOpts||'<option>請先新增公司</option>'; });
+}
+
+function populateProductSelects() {
+  const opts = db.products.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+  ['pr-product','sh-product'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=opts||'<option>請先新增產品</option>'; });
+  // Reset produce UI
+  const prProd = document.getElementById('pr-product');
+  if(prProd && prProd.value) onProduceProductChange();
+  else { const area=document.getElementById('pr-materials-area'); if(area) area.innerHTML='<div class="empty" style="padding:12px">請先選擇產品</div>'; }
+}
+
+function populatePurchaseSelects() {
+  const supOpts = db.suppliers.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
+  const matOpts = db.materials.map(m=>`<option value="${m.id}">${m.name}（${m.unit}）</option>`).join('');
+  const supEl = document.getElementById('pu-supplier'); if(supEl) supEl.innerHTML=supOpts||'<option>請先新增供應商</option>';
+  const matEl = document.getElementById('pu-material'); if(matEl) matEl.innerHTML=matOpts||'<option>請先新增原料</option>';
+}
+
+function populateShipSelects() {
+  populateProductSelects();
+  const coOpts = db.companies.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+  const coEl = document.getElementById('sh-company'); if(coEl) { coEl.innerHTML=coOpts||'<option>請先新增公司</option>'; fillBranches(); }
+}
+
+function fillBranches() {
+  const companyId = document.getElementById('sh-company').value;
+  const brs = db.branches.filter(b=>b.companyId===companyId);
+  document.getElementById('sh-branch').innerHTML = '<option value="">── 總公司 ──</option>' +
+    brs.map(b=>`<option value="${b.id}">${b.name}</option>`).join('');
+  // Update discount
+  const co = db.companies.find(x=>x.id===companyId);
+  const discEl = document.getElementById('sh-discount');
+  if(discEl && co) {
+    discEl.innerHTML = `<option value="${co.discountPct}">公司折扣 ${co.discountPct}%</option>` +
+      db.branches.filter(b=>b.companyId===companyId&&b.discountPct!=null&&b.discountPct!=='')
+        .map(b=>`<option value="${b.discountPct}">${b.name} 特殊折扣 ${b.discountPct}%</option>`).join('');
+  }
+  calcShipTotal();
+}
+
+function calcShipTotal() {
+  const productId = document.getElementById('sh-product')?.value;
+  const qty = parseFloat(document.getElementById('sh-qty')?.value)||0;
+  const discountPct = parseFloat(document.getElementById('sh-discount')?.value)||0;
+  const creditUsed = parseFloat(document.getElementById('sh-credit')?.value)||0;
+  const p = db.products.find(x=>x.id===productId);
+  if(!p||!qty) { document.getElementById('sh-total-preview').textContent=''; return; }
+  const gross = qty * p.price;
+  const afterDisc = gross * (1 - discountPct/100);
+  const final = Math.max(0, afterDisc - creditUsed);
+  document.getElementById('sh-total-preview').innerHTML = `
+    <span class="mono">$${gross.toLocaleString()} × (1 − ${discountPct}%) − Credit $${creditUsed.toLocaleString()} = <strong>$${final.toLocaleString()}</strong></span>
+  `;
+}
+
+// ════════════════════════════════════════
+//  PRODUCE RECORDS
+// ════════════════════════════════════════
+function onProduceProductChange() {
+  const p = db.products.find(x=>x.id===document.getElementById('pr-product').value);
+  // Reset batch inputs
+  ['pr-batches','pr-actual-units'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('pr-predicted-pieces').value='';
+  document.getElementById('pr-actual-pieces').value='';
+  document.getElementById('pr-yield-display').innerHTML='';
+  // Update unit label
+  const lbl = document.getElementById('pr-unit-label');
+  if(lbl) lbl.textContent = p ? (p.unit||'箱') : '箱';
+  // Render material rows
+  renderMaterialInputs(p, 0);
+}
+
+function calcProduceYield() {
+  const p = db.products.find(x=>x.id===document.getElementById('pr-product').value);
+  if(!p) return;
+  const batches = parseFloat(document.getElementById('pr-batches').value)||0;
+  const actualUnits = parseFloat(document.getElementById('pr-actual-units').value)||0;
+  const unitQty = p.unitQty||1;
+  const batchOutput = p.batchOutput||0;
+
+  // Predicted pieces = batches × batchOutput (gross)
+  const predictedPieces = batches ? Math.round(batches * batchOutput) : 0;
+  document.getElementById('pr-predicted-pieces').value = predictedPieces||'';
+
+  // Actual pieces = actualUnits × unitQty
+  const actualPieces = actualUnits ? Math.round(actualUnits * unitQty) : 0;
+  document.getElementById('pr-actual-pieces').value = actualPieces||'';
+
+  // Yield
+  const yieldDisplay = document.getElementById('pr-yield-display');
+  if(predictedPieces && actualPieces) {
+    const actualYield = (actualPieces/predictedPieces*100).toFixed(1);
+    const defaultYield = p.defaultYieldPct||0;
+    const diff = (parseFloat(actualYield)-defaultYield).toFixed(1);
+    const diffColor = parseFloat(diff)>=0 ? 'var(--accent)' : 'var(--danger)';
+    const diffStr = parseFloat(diff)>=0 ? `+${diff}%` : `${diff}%`;
+    yieldDisplay.innerHTML = `<span class="mono" style="color:var(--text-2)">實際良率 <strong style="color:${diffColor}">${actualYield}%</strong>（預設 ${defaultYield}%，差異 <span style="color:${diffColor}">${diffStr}</span>）</span>`;
+  } else {
+    yieldDisplay.innerHTML='';
+  }
+
+  // Update material predicted quantities
+  renderMaterialInputs(p, batches);
+}
+
+function renderMaterialInputs(p, batches) {
+  const area = document.getElementById('pr-materials-area');
+  if(!p || !(p.recipe||[]).length) {
+    area.innerHTML='<div class="empty" style="padding:12px">此產品無配方設定</div>'; return;
+  }
+  area.innerHTML = p.recipe.map(r=>{
+    const m = db.materials.find(x=>x.id===r.materialId); if(!m) return '';
+    const perBatch = r.perBatch||r.perUnit||0;
+    const predicted = batches ? +(batches * perBatch).toFixed(3) : 0;
+    const currentActualEl = document.getElementById('actual-'+r.materialId);
+    const currentActual = currentActualEl ? currentActualEl.value : '';
+    return `<div class="form-grid" style="margin-bottom:8px">
+      <div class="form-group">
+        <label>${m.name}（${m.unit}）— 預測消耗</label>
+        <input type="number" value="${predicted||''}" readonly style="background:var(--surface2);color:var(--text-3)">
+      </div>
+      <div class="form-group">
+        <label>實際消耗（手動輸入，留空=使用預測值）</label>
+        <input type="number" id="actual-${r.materialId}" placeholder="${predicted||0}" step="0.01" value="${currentActual}">
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function addProduceRecord() {
+  const date = document.getElementById('pr-date').value;
+  const productId = document.getElementById('pr-product').value;
+  const batches = parseFloat(document.getElementById('pr-batches').value)||0;
+  const actualUnits = parseFloat(document.getElementById('pr-actual-units').value)||0;
+  if(!date||!productId||batches<=0||actualUnits<=0) return alert('請填寫日期、產品、批次數與實際包裝數量');
+
+  const p = db.products.find(x=>x.id===productId);
+  const unitQty = p?.unitQty||1;
+  const batchOutput = p?.batchOutput||0;
+  const predictedPieces = Math.round(batches * batchOutput);
+  const actualPieces = Math.round(actualUnits * unitQty);
+  const actualYieldPct = predictedPieces ? parseFloat((actualPieces/predictedPieces*100).toFixed(2)) : null;
+
+  const materialUsage = (p?.recipe||[]).map(r=>{
+    const perBatch = r.perBatch||r.perUnit||0;
+    const predicted = +(batches * perBatch).toFixed(3);
+    const actualEl = document.getElementById('actual-'+r.materialId);
+    const actual = actualEl&&actualEl.value!=='' ? parseFloat(actualEl.value) : predicted;
+    return { materialId:r.materialId, predicted, actual };
+  });
+
+  db.produceRecords.push({
+    id:uid(), date, productId, batches,
+    predictedPieces, actualPieces, actualUnits,
+    actualYieldPct,
+    note: document.getElementById('pr-note').value.trim(),
+    materialUsage,
+  });
+  save();
+  ['pr-batches','pr-actual-units','pr-note','pr-predicted-pieces','pr-actual-pieces'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('pr-yield-display').innerHTML='';
+  renderMaterialInputs(p, 0);
+  renderProduceRecords();
+}
+
+function deleteProduceRecord(id) {
+  if(!confirm('確定刪除？')) return;
+  db.produceRecords = db.produceRecords.filter(r=>r.id!==id);
+  save(); renderProduceRecords();
+}
+
+function renderProduceRecords() {
+  const rows = [...db.produceRecords].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,30);
+  document.getElementById('produce-body').innerHTML = rows.length
+    ? rows.map(r=>{
+        const p = db.products.find(x=>x.id===r.productId);
+        const yieldPct = r.actualYieldPct!=null ? r.actualYieldPct : '—';
+        const defaultY = p?.defaultYieldPct||0;
+        let yieldCell = yieldPct;
+        if(typeof yieldPct==='number' && defaultY) {
+          const diff = yieldPct - defaultY;
+          const color = diff>=0?'var(--accent)':'var(--danger)';
+          yieldCell = `<span style="color:${color};font-family:var(--mono)">${yieldPct}%</span>`;
+        } else if(typeof yieldPct==='number') {
+          yieldCell = `<span class="mono">${yieldPct}%</span>`;
+        }
+        return `<tr>
+          <td>${r.date}</td>
+          <td>${p?p.name:'—'}</td>
+          <td class="mono">${r.batches}</td>
+          <td class="mono">${(r.predictedPieces||0).toLocaleString()}</td>
+          <td class="mono">${(r.actualPieces||0).toLocaleString()}</td>
+          <td class="mono">${r.actualUnits} ${p?p.unit:''}</td>
+          <td>${yieldCell}</td>
+          <td class="text-2">${r.note||'—'}</td>
+          <td><button class="btn btn-danger" onclick="deleteProduceRecord('${r.id}')">刪除</button></td>
+        </tr>`;
+      }).join('')
+    : '<tr><td colspan="9"><div class="empty">尚無生產記錄</div></td></tr>';
+}
+
+// ════════════════════════════════════════
+//  SHIP RECORDS
+// ════════════════════════════════════════
+function addShipRecord() {
+  const date = document.getElementById('sh-date').value;
+  const productId = document.getElementById('sh-product').value;
+  const companyId = document.getElementById('sh-company').value;
+  const branchId = document.getElementById('sh-branch').value;
+  const qty = parseFloat(document.getElementById('sh-qty').value)||0;
+  if(!date||!productId||!companyId||qty<=0) return alert('請填寫完整資訊');
+
+  const discountPct = parseFloat(document.getElementById('sh-discount').value)||getEffectiveDiscount(companyId, branchId);
+  const creditUsed = parseFloat(document.getElementById('sh-credit').value)||0;
+  const p = db.products.find(x=>x.id===productId);
+  const gross = qty*(p?.price||0);
+  const finalAmount = Math.max(0, gross*(1-discountPct/100) - creditUsed);
+
+  if(creditUsed>0) {
+    // Record credit usage
+    db.creditRecords.push({ id:uid(), date, companyId, branchId, amount:creditUsed, type:'use', reason:`出貨折抵 ${date}` });
+  }
+
+  db.shipRecords.push({ id:uid(), date, productId, companyId, branchId, qty, discountPct, creditUsed, finalAmount,
+    weather: document.getElementById('sh-weather').value,
+    tempHigh: parseFloat(document.getElementById('sh-high').value)||null,
+    tempLow: parseFloat(document.getElementById('sh-low').value)||null,
+    holiday: document.getElementById('sh-holiday').value.trim() });
+  save();
+
+  ['sh-qty','sh-credit','sh-high','sh-low','sh-holiday'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('sh-total-preview').textContent='';
+  renderShipRecords();
+}
+
+function deleteShipRecord(id) {
+  if(!confirm('確定刪除？')) return;
+  db.shipRecords = db.shipRecords.filter(r=>r.id!==id);
+  save(); renderShipRecords();
+}
+
+function renderShipRecords() {
+  const rows = [...db.shipRecords].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,30);
+  document.getElementById('ship-body').innerHTML = rows.length
+    ? rows.map(r=>{ const p=db.products.find(x=>x.id===r.productId); const co=db.companies.find(x=>x.id===r.companyId); const br=r.branchId?db.branches.find(x=>x.id===r.branchId):null;
+        return `<tr><td>${r.date}</td><td>${co?co.name:'—'}${br?`<br><span class="text-3" style="font-size:11px">${br.name}</span>`:''}</td><td>${p?p.name:'—'}</td><td class="mono">${r.qty}</td><td class="mono">${r.discountPct}%</td><td class="mono">$${r.finalAmount.toLocaleString()}</td><td>${r.weather||'—'}${r.tempHigh?` ${r.tempHigh}°`:''}</td><td><button class="btn btn-danger" onclick="deleteShipRecord('${r.id}')">刪除</button></td></tr>`;}).join('')
+    : '<tr><td colspan="8"><div class="empty">尚無出貨記錄</div></td></tr>';
+}
+
+// ════════════════════════════════════════
+//  PURCHASE RECORDS
+// ════════════════════════════════════════
+function addPurchaseRecord() {
+  const date = document.getElementById('pu-date').value;
+  const supplierId = document.getElementById('pu-supplier').value;
+  const materialId = document.getElementById('pu-material').value;
+  const qty = parseFloat(document.getElementById('pu-qty').value)||0;
+  if(!date||!supplierId||!materialId||qty<=0) return alert('請填寫完整資訊');
+  db.purchaseRecords.push({ id:uid(), date, supplierId, materialId, qty, note:document.getElementById('pu-note').value.trim() });
+  save();
+  ['pu-qty','pu-note'].forEach(id=>document.getElementById(id).value='');
+  renderPurchaseRecords();
+}
+
+function deletePurchaseRecord(id) {
+  if(!confirm('確定刪除？')) return;
+  db.purchaseRecords = db.purchaseRecords.filter(r=>r.id!==id);
+  save(); renderPurchaseRecords();
+}
+
+function renderPurchaseRecords() {
+  const rows = [...db.purchaseRecords].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,30);
+  document.getElementById('purchase-body').innerHTML = rows.length
+    ? rows.map(r=>{ const s=db.suppliers.find(x=>x.id===r.supplierId); const m=db.materials.find(x=>x.id===r.materialId);
+        return `<tr><td>${r.date}</td><td>${s?s.name:'—'}</td><td>${m?m.name:'—'}</td><td class="mono">${r.qty} ${m?m.unit:''}</td><td class="text-2">${r.note||'—'}</td><td><button class="btn btn-danger" onclick="deletePurchaseRecord('${r.id}')">刪除</button></td></tr>`;}).join('')
+    : '<tr><td colspan="6"><div class="empty">尚無進貨記錄</div></td></tr>';
+}
+
+// ════════════════════════════════════════
+//  REPORTS
+// ════════════════════════════════════════
+function setReportDefaults() {
+  const now = new Date();
+  document.getElementById('rpt-start').value = new Date(now.getFullYear(),now.getMonth(),1).toISOString().slice(0,10);
+  document.getElementById('rpt-end').value = now.toISOString().slice(0,10);
+}
+
+function populateReportFilters() {
+  const coOpts = '<option value="">全部公司</option>' + db.companies.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+  document.getElementById('rpt-company').innerHTML = coOpts;
+  const prOpts = '<option value="">全部產品</option>' + db.products.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+  document.getElementById('rpt-product').innerHTML = prOpts;
+}
+
+function generateReport() {
+  const start = document.getElementById('rpt-start').value;
+  const end = document.getElementById('rpt-end').value;
+  const filterCo = document.getElementById('rpt-company').value;
+  const filterPr = document.getElementById('rpt-product').value;
+
+  let filtered = db.shipRecords.filter(r=>r.date>=start&&r.date<=end);
+  if(filterCo) filtered = filtered.filter(r=>r.companyId===filterCo);
+  if(filterPr) filtered = filtered.filter(r=>r.productId===filterPr);
+
+  // By product
+  let totalQty=0, totalAmt=0;
+  const byProduct = db.products.map(p=>{
+    const recs = filtered.filter(r=>r.productId===p.id);
+    const qty = recs.reduce((s,r)=>s+r.qty,0);
+    const amt = recs.reduce((s,r)=>s+r.finalAmount,0);
+    totalQty+=qty; totalAmt+=amt;
+    if(qty===0) return null;
+    return `<tr><td>${p.name}</td><td class="mono">${qty.toLocaleString()} ${p.unit}</td><td class="mono">$${amt.toLocaleString()}</td></tr>`;
+  }).filter(Boolean);
+
+  // By company
+  const byCompany = db.companies.map(co=>{
+    const recs = filtered.filter(r=>r.companyId===co.id);
+    if(!recs.length) return null;
+    const qty = recs.reduce((s,r)=>s+r.qty,0);
+    const amt = recs.reduce((s,r)=>s+r.finalAmount,0);
+    // by branch
+    const branches = db.branches.filter(b=>b.companyId===co.id);
+    const branchRows = branches.map(b=>{
+      const brRecs = recs.filter(r=>r.branchId===b.id);
+      if(!brRecs.length) return '';
+      const bq=brRecs.reduce((s,r)=>s+r.qty,0), ba=brRecs.reduce((s,r)=>s+r.finalAmount,0);
+      return `<tr style="background:var(--surface2)"><td style="padding-left:32px"><span class="badge badge-branch">${b.name}</span></td><td class="mono">${bq.toLocaleString()}</td><td class="mono">$${ba.toLocaleString()}</td></tr>`;
+    }).join('');
+    return `<tr><td><span class="badge badge-parent">${co.name}</span></td><td class="mono">${qty.toLocaleString()}</td><td class="mono">$${amt.toLocaleString()}</td></tr>${branchRows}`;
+  }).filter(Boolean);
+
+  document.getElementById('report-output').innerHTML = `
+    <div class="card">
+      <div class="card-title">各產品彙總</div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>產品</th><th>出貨量</th><th>出貨金額</th></tr></thead>
+        <tbody>${byProduct.join('')||'<tr><td colspan="3"><div class="empty">此區間無資料</div></td></tr>'}
+          ${byProduct.length?`<tr class="summary-row"><td>合計</td><td class="mono">${totalQty.toLocaleString()}</td><td class="mono">$${totalAmt.toLocaleString()}</td></tr>`:''}
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <div class="card-title">各客戶出貨（含分店明細）</div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>客戶</th><th>出貨量</th><th>出貨金額</th></tr></thead>
+        <tbody>${byCompany.join('')||'<tr><td colspan="3"><div class="empty">此區間無資料</div></td></tr>'}</tbody>
+      </table></div>
+    </div>`;
+}
+
+// ════════════════════════════════════════
+//  STOCK REPORT
+// ════════════════════════════════════════
+function renderStockReport() {
+  document.getElementById('stock-products-body').innerHTML = db.products.length
+    ? db.products.map(p=>{ const s=getProductStock(p.id); const cls=s<=0?'badge-empty':s<=p.minStock?'badge-low':'badge-ok'; const lbl=s<=0?'缺貨':s<=p.minStock?'偏低':'正常';
+        return `<tr><td>${p.name}</td><td>${p.unit}</td><td class="mono">${s.toLocaleString()}</td><td class="mono">${p.minStock}</td><td><span class="badge ${cls}">${lbl}</span></td></tr>`; }).join('')
+    : '<tr><td colspan="5"><div class="empty">尚無產品</div></td></tr>';
+
+  document.getElementById('stock-materials-body').innerHTML = db.materials.length
+    ? db.materials.map(m=>{ const s=getMaterialStock(m.id); const cls=s<=0?'badge-empty':s<=m.minStock?'badge-low':'badge-ok'; const lbl=s<=0?'缺料':s<=m.minStock?'偏低':'正常';
+        return `<tr><td>${m.name}</td><td>${m.unit}</td><td class="mono">${s.toLocaleString()}</td><td class="mono">${m.minStock}</td><td><span class="badge ${cls}">${lbl}</span></td></tr>`; }).join('')
+    : '<tr><td colspan="5"><div class="empty">尚無原料</div></td></tr>';
+}
+
+// ════════════════════════════════════════
+//  SYNC
+// ════════════════════════════════════════
+function exportData() {
+  const data = JSON.stringify({ ...db, exportedAt: new Date().toISOString() });
+  document.getElementById('export-text').value = data;
+  document.getElementById('export-box').style.display = 'block';
+  navigator.clipboard.writeText(data).catch(()=>{});
+}
+
+function downloadData() {
+  const data = JSON.stringify({ ...db, exportedAt: new Date().toISOString() }, null, 2);
+  const blob = new Blob([data], { type:'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '麵包管理備份_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+}
+
+function importData(mode) {
+  const text = document.getElementById('import-text').value.trim();
+  const ok = document.getElementById('import-ok'), err = document.getElementById('import-err');
+  ok.style.display='none'; err.style.display='none';
+  if(!text) { err.textContent='請貼上資料碼'; err.style.display='block'; return; }
+  try {
+    const data = JSON.parse(text);
+    const keys = ['products','materials','companies','branches','suppliers','produceRecords','shipRecords','purchaseRecords','creditRecords','productChangelog'];
+    if(mode==='replace') {
+      keys.forEach(k=>{ if(data[k]) db[k]=data[k]; });
+    } else {
+      keys.forEach(k=>{
+        if(!data[k]) return;
+        if(!db[k]) db[k]=[];
+        const ids = new Set(db[k].map(x=>x.id));
+        data[k].forEach(x=>{ if(!ids.has(x.id)) db[k].push(x); });
+      });
+    }
+    save();
+    document.getElementById('import-text').value='';
+    ok.textContent=`匯入成功！`;
+    ok.style.display='block';
+    renderDashboard();
+  } catch(e) {
+    err.textContent='資料格式有誤，請確認內容是否完整。';
+    err.style.display='block';
+  }
+}
+
+// ════════════════════════════════════════
+//  MODAL HELPERS
+// ════════════════════════════════════════
+let _editingId = null;
+let _epRecipeRows = [];
+
+function openModal(name) { document.getElementById('modal-'+name).classList.add('open'); }
+function closeModal(name) { document.getElementById('modal-'+name).classList.remove('open'); _editingId=null; }
+
+// ── Edit Product ──
+function epCalcGood() {
+  const out = parseFloat(document.getElementById('ep-batch-out').value)||0;
+  const yld = parseFloat(document.getElementById('ep-yield').value)||0;
+  document.getElementById('ep-batch-good').value = out&&yld ? Math.round(out*yld/100) : '';
+}
+
+function epAddRecipeRow(matId, qty) {
+  const id = uid();
+  _epRecipeRows.push(id);
+  const area = document.getElementById('ep-recipe-area');
+  const opts = db.materials.map(m=>`<option value="${m.id}" ${m.id===matId?'selected':''}>${m.name}（${m.unit}）</option>`).join('');
+  const div = document.createElement('div');
+  div.id = 'ep-rec-row-'+id;
+  div.className = 'form-grid';
+  div.style.marginBottom='8px';
+  div.innerHTML = `
+    <div class="form-group"><label>原料</label><select id="ep-rec-mat-${id}">${opts||'<option>請先新增原料</option>'}</select></div>
+    <div style="display:flex;gap:8px;align-items:flex-end">
+      <div class="form-group" style="flex:1"><label>每批次消耗量</label><input type="number" id="ep-rec-qty-${id}" value="${qty||''}" placeholder="0" step="0.01"></div>
+      <button class="btn btn-danger btn-sm" onclick="epRemoveRecipeRow('${id}')" style="margin-bottom:0;height:34px">移除</button>
+    </div>`;
+  area.appendChild(div);
+}
+
+function epRemoveRecipeRow(id) {
+  _epRecipeRows = _epRecipeRows.filter(r=>r!==id);
+  const el = document.getElementById('ep-rec-row-'+id);
+  if(el) el.remove();
+}
+
+function openEditProduct(id) {
+  _editingId = id;
+  _epRecipeRows = [];
+  const p = db.products.find(x=>x.id===id);
+  if(!p) return;
+  document.getElementById('ep-name').value = p.name||'';
+  document.getElementById('ep-price').value = p.price||'';
+  document.getElementById('ep-batch-out').value = p.batchOutput||'';
+  document.getElementById('ep-yield').value = p.defaultYieldPct||'';
+  document.getElementById('ep-batch-good').value = p.batchOutput&&p.defaultYieldPct ? Math.round(p.batchOutput*p.defaultYieldPct/100) : '';
+  document.getElementById('ep-unit').value = p.unit||'';
+  document.getElementById('ep-unit-qty').value = p.unitQty||'';
+  document.getElementById('ep-min').value = p.minStock||'';
+  document.getElementById('ep-stock').value = p.initialStock||'';
+  document.getElementById('ep-recipe-area').innerHTML = '';
+  (p.recipe||[]).forEach(r=>epAddRecipeRow(r.materialId, r.perBatch||r.perUnit||0));
+  openModal('product');
+}
+
+function saveEditProduct() {
+  if(!_editingId) return;
+  const p = db.products.find(x=>x.id===_editingId);
+  if(!p) return;
+
+  // Snapshot BEFORE changes for diff
+  const before = JSON.parse(JSON.stringify(p));
+
+  p.name = document.getElementById('ep-name').value.trim()||p.name;
+  p.price = parseFloat(document.getElementById('ep-price').value)||0;
+  p.batchOutput = parseFloat(document.getElementById('ep-batch-out').value)||0;
+  p.defaultYieldPct = parseFloat(document.getElementById('ep-yield').value)||0;
+  p.unit = document.getElementById('ep-unit').value||p.unit;
+  p.unitQty = parseFloat(document.getElementById('ep-unit-qty').value)||1;
+  p.minStock = parseFloat(document.getElementById('ep-min').value)||0;
+  p.initialStock = parseFloat(document.getElementById('ep-stock').value)||0;
+  p.recipe = _epRecipeRows.map(rid=>({
+    materialId: document.getElementById('ep-rec-mat-'+rid)?.value,
+    perBatch: parseFloat(document.getElementById('ep-rec-qty-'+rid)?.value)||0,
+  })).filter(r=>r.materialId&&r.perBatch>0);
+
+  // Record edit changelog with diffs
+  recordProductEdit(before, p);
+
+  save(); closeModal('product'); renderProducts();
+}
+
+function copyProduct(id) {
+  const p = db.products.find(x=>x.id===id);
+  if(!p) return;
+  const copy = JSON.parse(JSON.stringify(p));
+  copy.id = uid();
+  copy.name = p.name + '（複製）';
+  copy.initialStock = 0;
+  db.products.push(copy);
+  save(); renderProducts();
+}
+
+// ── Edit Material ──
+function openEditMaterial(id) {
+  _editingId = id;
+  const m = db.materials.find(x=>x.id===id);
+  if(!m) return;
+  document.getElementById('em-name').value = m.name||'';
+  document.getElementById('em-unit').value = m.unit||'';
+  document.getElementById('em-stock').value = m.initialStock||'';
+  document.getElementById('em-min').value = m.minStock||'';
+  openModal('material');
+}
+
+function saveEditMaterial() {
+  if(!_editingId) return;
+  const m = db.materials.find(x=>x.id===_editingId);
+  if(!m) return;
+  m.name = document.getElementById('em-name').value.trim()||m.name;
+  m.unit = document.getElementById('em-unit').value||m.unit;
+  m.initialStock = parseFloat(document.getElementById('em-stock').value)||0;
+  m.minStock = parseFloat(document.getElementById('em-min').value)||0;
+  save(); closeModal('material'); renderMaterials();
+}
+
+// ── Edit Supplier ──
+function openEditSupplier(id) {
+  _editingId = id;
+  const s = db.suppliers.find(x=>x.id===id);
+  if(!s) return;
+  document.getElementById('esup-name').value = s.name||'';
+  document.getElementById('esup-contact').value = s.contact||'';
+  document.getElementById('esup-note').value = s.note||'';
+  openModal('supplier');
+}
+
+function saveEditSupplier() {
+  if(!_editingId) return;
+  const s = db.suppliers.find(x=>x.id===_editingId);
+  if(!s) return;
+  s.name = document.getElementById('esup-name').value.trim()||s.name;
+  s.contact = document.getElementById('esup-contact').value.trim();
+  s.note = document.getElementById('esup-note').value.trim();
+  save(); closeModal('supplier'); renderSuppliers();
+}
+
+// ── Edit Company ──
+function openEditCompany(id) {
+  _editingId = id;
+  const c = db.companies.find(x=>x.id===id);
+  if(!c) return;
+  document.getElementById('eco-name').value = c.name||'';
+  document.getElementById('eco-discount').value = c.discountPct||'';
+  document.getElementById('eco-note').value = c.note||'';
+  openModal('company');
+}
+
+function saveEditCompany() {
+  if(!_editingId) return;
+  const c = db.companies.find(x=>x.id===_editingId);
+  if(!c) return;
+  c.name = document.getElementById('eco-name').value.trim()||c.name;
+  c.discountPct = parseFloat(document.getElementById('eco-discount').value)||0;
+  c.note = document.getElementById('eco-note').value.trim();
+  save(); closeModal('company'); renderCompanies(); populateClientSelects();
+}
+
+// ── Edit Branch ──
+function openEditBranch(id) {
+  _editingId = id;
+  const b = db.branches.find(x=>x.id===id);
+  if(!b) return;
+  // Populate company select
+  const coOpts = db.companies.map(c=>`<option value="${c.id}" ${c.id===b.companyId?'selected':''}>${c.name}</option>`).join('');
+  document.getElementById('ebr-company').innerHTML = coOpts;
+  document.getElementById('ebr-name').value = b.name||'';
+  document.getElementById('ebr-discount').value = b.discountPct!=null ? b.discountPct : '';
+  document.getElementById('ebr-note').value = b.note||'';
+  openModal('branch');
+}
+
+function saveEditBranch() {
+  if(!_editingId) return;
+  const b = db.branches.find(x=>x.id===_editingId);
+  if(!b) return;
+  b.companyId = document.getElementById('ebr-company').value;
+  b.name = document.getElementById('ebr-name').value.trim()||b.name;
+  const dv = document.getElementById('ebr-discount').value;
+  b.discountPct = dv===''||dv===null ? null : parseFloat(dv);
+  b.note = document.getElementById('ebr-note').value.trim();
+  save(); closeModal('branch'); renderBranches();
+}
+
+// ── Keyboard close ──
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') ['product','material','supplier','company','branch'].forEach(n=>closeModal(n)); });
+
+// ════════════════════════════════════════
+//  MOBILE DRAWER
+// ════════════════════════════════════════
+function toggleDrawer() {
+  const aside = document.querySelector('aside');
+  const overlay = document.getElementById('drawer-overlay');
+  const isOpen = aside.classList.contains('open');
+  if(isOpen) { closeDrawer(); } else { aside.classList.add('open'); overlay.classList.add('open'); }
+}
+
+function closeDrawer() {
+  document.querySelector('aside').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+}
+
+// ════════════════════════════════════════
+//  PRODUCT CHANGELOG
+// ════════════════════════════════════════
+const FIELD_LABELS = {
+  name: '產品名稱',
+  price: '定價',
+  unit: '包裝單位',
+  unitQty: '每包裝顆數',
+  batchOutput: '每批次產出（顆）',
+  defaultYieldPct: '預設良率（%）',
+  minStock: '低庫存警示量',
+  initialStock: '初始庫存',
+};
+
+function todayStr() {
+  return new Date().toISOString().slice(0,10);
+}
+
+function recipeToText(recipe) {
+  if(!recipe||!recipe.length) return '無';
+  return recipe.map(r=>{
+    const m = db.materials.find(x=>x.id===r.materialId);
+    return `${m?m.name:'未知原料'} ×${r.perBatch||r.perUnit||0}`;
+  }).join('、');
+}
+
+function recordProductSnapshot(p, type) {
+  if(!db.productChangelog) db.productChangelog = [];
+  db.productChangelog.push({
+    id: uid(),
+    ts: Date.now(),
+    date: todayStr(),
+    productId: p.id,
+    productName: p.name,
+    type,
+    snapshot: JSON.parse(JSON.stringify(p)),
+    diffs: [],
+  });
+}
+
+function recordProductEdit(before, after) {
+  if(!db.productChangelog) db.productChangelog = [];
+  const diffs = [];
+
+  // Compare scalar fields
+  Object.keys(FIELD_LABELS).forEach(field=>{
+    const oldVal = before[field], newVal = after[field];
+    if(String(oldVal) !== String(newVal)) {
+      diffs.push({ field, label: FIELD_LABELS[field], oldVal: String(oldVal??'—'), newVal: String(newVal??'—') });
+    }
+  });
+
+  // Compare recipe
+  const oldRecipe = recipeToText(before.recipe);
+  const newRecipe = recipeToText(after.recipe);
+  if(oldRecipe !== newRecipe) {
+    diffs.push({ field:'recipe', label:'原料配方', oldVal: oldRecipe, newVal: newRecipe });
+  }
+
+  if(!diffs.length) return; // Nothing changed, skip
+
+  db.productChangelog.push({
+    id: uid(),
+    ts: Date.now(),
+    date: todayStr(),
+    productId: after.id,
+    productName: after.name,
+    type: 'edit',
+    snapshot: JSON.parse(JSON.stringify(after)),
+    diffs,
+  });
+}
+
+function renderChangelog() {
+  const filterPid = document.getElementById('cl-filter-product')?.value||'';
+  const filterType = document.getElementById('cl-filter-type')?.value||'';
+  const log = db.productChangelog||[];
+
+  let entries = [...log].sort((a,b)=>b.ts-a.ts);
+  if(filterPid) entries = entries.filter(e=>e.productId===filterPid);
+  if(filterType) entries = entries.filter(e=>e.type===filterType);
+
+  const container = document.getElementById('changelog-list');
+  if(!entries.length) {
+    container.innerHTML = '<div class="card"><div class="empty">尚無變更記錄</div></div>';
+    return;
+  }
+
+  container.innerHTML = entries.map(e=>{
+    const isCreate = e.type==='create';
+    const typeBadge = isCreate
+      ? '<span class="badge cl-badge-create">建立</span>'
+      : '<span class="badge cl-badge-edit">變更</span>';
+    const diffCount = e.diffs?.length||0;
+    const summary = isCreate ? '產品初始建立' : `${diffCount} 項變更`;
+
+    const bodyHtml = isCreate
+      ? renderSnapshotBox(e.snapshot)
+      : renderDiffTable(e.diffs) + renderSnapshotBox(e.snapshot);
+
+    return `<div class="cl-entry" id="cl-${e.id}">
+      <div class="cl-entry-header" onclick="toggleClEntry('${e.id}')">
+        <div class="cl-entry-meta">
+          <span class="cl-entry-date">${e.date}</span>
+          ${typeBadge}
+          <span class="cl-entry-product">${e.productName}</span>
+          <span class="cl-entry-summary">${summary}</span>
+        </div>
+        <span class="cl-chevron">▼</span>
+      </div>
+      <div class="cl-entry-body">${bodyHtml}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleClEntry(id) {
+  document.getElementById('cl-'+id)?.classList.toggle('expanded');
+}
+
+function renderDiffTable(diffs) {
+  if(!diffs||!diffs.length) return '<p style="font-size:12px;color:var(--text-3);padding:10px 0">無欄位差異</p>';
+  const rows = diffs.map(d=>`
+    <tr>
+      <td class="diff-field">${d.label}</td>
+      <td><span class="diff-old">${d.oldVal}</span></td>
+      <td><span class="diff-new">${d.newVal}</span></td>
+    </tr>`).join('');
+  return `<table class="cl-diff-table">
+    <thead><tr><th>欄位</th><th>變更前</th><th>變更後</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function renderSnapshotBox(snap) {
+  if(!snap) return '';
+  const recipe = recipeToText(snap.recipe);
+  const rows = [
+    ['產品名稱', snap.name],
+    ['定價', `$${(snap.price||0).toLocaleString()}`],
+    ['包裝單位', `1 ${snap.unit||'—'} = ${snap.unitQty||'—'} 顆`],
+    ['每批次產出', snap.batchOutput ? `${snap.batchOutput} 顆` : '—'],
+    ['預設良率', snap.defaultYieldPct ? `${snap.defaultYieldPct}%` : '—'],
+    ['低庫存警示', `${snap.minStock||0} ${snap.unit||''}`],
+    ['原料配方', recipe],
+  ].map(([k,v])=>`<div class="cl-snapshot-row"><span class="cl-snapshot-key">${k}</span><span class="cl-snapshot-val">${v}</span></div>`).join('');
+  return `<div class="cl-snapshot-box"><div class="cl-snapshot-title">此版本完整快照</div>${rows}</div>`;
+}
+
+function populateChangelogFilter() {
+  const el = document.getElementById('cl-filter-product');
+  if(!el) return;
+  el.innerHTML = '<option value="">全部產品</option>' +
+    db.products.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+}
+
+// ════════════════════════════════════════
+//  SEED DATA
+// ════════════════════════════════════════
+const BASE_RECIPE = [
+  { materialId:'RF', perUnit:1.0    },  // Red Flour 中筋 12.5kg
+  { materialId:'BF', perUnit:1.0    },  // Blue Flour 高筋 12.5kg
+  { materialId:'CS', perUnit:0.18   },  // Caster Sugar 4.5kg
+  { materialId:'EE', perUnit:0.25   },  // Egg 2.5kg
+  { materialId:'MP', perUnit:0.03   },  // Milk Powder 750g
+  { materialId:'IP', perUnit:0.0147 },  // Improver 220g
+  { materialId:'SS', perUnit:0.022  },  // Super Fine Salt 220g
+  { materialId:'XL', perUnit:0.004  },  // Xtendlife 100g
+  { materialId:'SO', perUnit:0.1    },  // Saftem Oil 1L
+  { materialId:'YS', perUnit:0.84   },  // Yeast 420g
+  { materialId:'WT', perUnit:11.2   },  // Water 11.2L
+];
+
+function makeRecipe(overrides = {}) {
+  return BASE_RECIPE.map(r =>
+    overrides[r.materialId] !== undefined
+      ? { ...r, perUnit: overrides[r.materialId] }
+      : { ...r }
+  );
+}
+
+function seedIfEmpty() {
+  if (db.products.length > 0) return;
+  db.materials = [
+    { id:'BF', name:'Blue Flour (BF)',       unit:'袋（12.5kg）', initialStock:89,   minStock:2 },
+    { id:'RF', name:'Red Flour (RF)',        unit:'袋（12.5kg）', initialStock:89,   minStock:2 },
+    { id:'CS', name:'Caster Sugar (CS)',     unit:'袋（25kg）',   initialStock:32,   minStock:1 },
+    { id:'EE', name:'Egg (EE)',              unit:'箱（10kg）',   initialStock:123,  minStock:1 },
+    { id:'MP', name:'Milk Powder (MP)',      unit:'袋（25kg）',   initialStock:21,   minStock:1 },
+    { id:'IP', name:'Improver (IP)',         unit:'袋（15kg）',   initialStock:3,    minStock:1 },
+    { id:'SS', name:'Super Fine Salt (SS)',  unit:'袋（10kg）',   initialStock:5,    minStock:1 },
+    { id:'XL', name:'Xtendlife (XL)',        unit:'袋（25kg）',   initialStock:1,    minStock:1 },
+    { id:'SO', name:'Saftem Oil (SO)',       unit:'桶（10L）',    initialStock:21,   minStock:1 },
+    { id:'YS', name:'Yeast (YS)',            unit:'袋（500g）',   initialStock:2060, minStock:4 },
+    { id:'SG', name:'Sunset Glaze (SG)',     unit:'箱（10L）',    initialStock:37,   minStock:1 },
+    { id:'WS', name:'White Sesame (WS)',     unit:'袋（25kg）',   initialStock:4,    minStock:1 },
+    { id:'WT', name:'Water (WT)',            unit:'L',           initialStock:0,    minStock:0 },
+  ];
+  db.products = [
+    { id:'MB6530',      name:'MB6530 — Milk Bun 65g',                unit:'筐', unitQty:30,  price:19.20, batchOutput:696, defaultYieldPct:100, minStock:5, initialStock:156, recipe:makeRecipe()},
+    { id:'MB6548',      name:'MB6548 — Milk Bun 65g',                unit:'箱', unitQty:48,  price:30.72, batchOutput:696, defaultYieldPct:100, minStock:5, initialStock:307, recipe:makeRecipe()},
+    { id:'MB654802',    name:'MB654802 — Milk Bun 65g (風爐)',        unit:'箱', unitQty:48,  price:33.60, batchOutput:696, defaultYieldPct:100, minStock:5, initialStock:120, recipe:makeRecipe()},
+    { id:'MB8030',      name:'MB8030 — Milk Bun 80g',                unit:'筐', unitQty:30,  price:24.00, batchOutput:550, defaultYieldPct:100, minStock:5, initialStock:34,  recipe:makeRecipe({YS:0.62})},
+    { id:'MB8048',      name:'MB8048 — Milk Bun 80g',                unit:'箱', unitQty:48,  price:38.40, batchOutput:550, defaultYieldPct:100, minStock:5, initialStock:8,   recipe:makeRecipe({YS:0.62})},
+    { id:'MSB3096',     name:'MSB3096 — Mini Slider Bun 30g',        unit:'箱', unitQty:96,  price:48.00, batchOutput:400, defaultYieldPct:100, minStock:5, initialStock:4,   recipe:makeRecipe()},
+    { id:'MSB3596',     name:'MSB3596 — Mini Slider Bun 35g',        unit:'箱', unitQty:96,  price:48.00, batchOutput:400, defaultYieldPct:100, minStock:5, initialStock:3,   recipe:makeRecipe()},
+    { id:'MS3510',      name:'MS3510 — Milk Slab (35g×12)',          unit:'箱', unitQty:10,  price:60.00, batchOutput:20,  defaultYieldPct:100, minStock:3, initialStock:0,   recipe:makeRecipe()},
+    { id:'RB8048',      name:'RB8048 — Rustic Bun 80g',              unit:'箱', unitQty:48,  price:30.72, batchOutput:550, defaultYieldPct:100, minStock:5, initialStock:75,  recipe:makeRecipe()},
+    { id:'VBB6548',     name:'VBB6548 — Vegan Brioche Bun 65g',      unit:'箱', unitQty:48,  price:33.60, batchOutput:0,   defaultYieldPct:100, minStock:5, initialStock:46,  recipe:makeRecipe()},
+    { id:'STT',         name:'STT — Seed Texas Toast (65g×8)',       unit:'箱', unitQty:10,  price:60.00, batchOutput:32,  defaultYieldPct:100, minStock:3, initialStock:5,   recipe:makeRecipe()},
+    { id:'SMNEHB50100', name:'SMNEHB50100 — Seed Milk NE Hotdog Bun 50g', unit:'箱', unitQty:100, price:70.00, batchOutput:0, defaultYieldPct:100, minStock:3, initialStock:39,  recipe:makeRecipe()},
+    { id:'GF10048',     name:'GF10048 — Gluten Free Bun 100g',       unit:'箱', unitQty:48,  price:0,     batchOutput:0,   defaultYieldPct:100, minStock:5, initialStock:36,  recipe:makeRecipe()},
+  ];
+  save();
+}
+
+// ════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════
+load();
+seedIfEmpty();
+
+const now = new Date();
+document.getElementById('sidebar-date').textContent = now.toLocaleDateString('zh-TW', {year:'numeric',month:'long',day:'numeric',weekday:'short'});
+const dashDate = document.getElementById('dash-date');
+if(dashDate) dashDate.textContent = now.toLocaleDateString('zh-TW', {year:'numeric',month:'long',day:'numeric',weekday:'long'});
+
+// Set default dates
+['pr-date','sh-date','pu-date','cr-date'].forEach(id=>{
+  const el = document.getElementById(id);
+  if(el) el.value = now.toISOString().slice(0,10);
+});
+
+renderDashboard();
+</script>
+</body>
+</html>
