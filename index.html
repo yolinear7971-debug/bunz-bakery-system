@@ -2824,8 +2824,129 @@ function seedIfEmpty() {
     { id:'RB8048',      name:'RB8048 — Rustic Bun 80g',              unit:'箱', unitQty:48,  price:30.72, batchOutput:550, defaultYieldPct:100, minStock:5, initialStock:75,  recipe:makeRecipe()},
     { id:'VBB6548',     name:'VBB6548 — Vegan Brioche Bun 65g',      unit:'箱', unitQty:48,  price:33.60, batchOutput:0,   defaultYieldPct:100, minStock:5, initialStock:46,  recipe:makeRecipe()},
     { id:'STT',         name:'STT — Seed Texas Toast (65g×8)',       unit:'箱', unitQty:10,  price:60.00, batchOutput:32,  defaultYieldPct:100, minStock:3, initialStock:5,   recipe:makeRecipe()},
-    { id:'SMNEHB50100', name:'SMNEHB50100 — Seed Milk NE Hotdog Bun 50g', unit:'箱', unitQty:100, price:70.00, batchOutput:0, defaultYieldPct:100, minStock:3, initialStock:39,  recipe:makeRecipe()},
+    { id:'SMNEHB50100', name:'SMNEHB50100 — Seed Milk NE Hotdog Bun 50g', unit:'箱', unitQty:10,  price:70.00, batchOutput:0, defaultYieldPct:100, minStock:3, initialStock:39,  recipe:makeRecipe()},
     { id:'GF10048',     name:'GF10048 — Gluten Free Bun 100g',       unit:'箱', unitQty:48,  price:0,     batchOutput:0,   defaultYieldPct:100, minStock:5, initialStock:36,  recipe:makeRecipe()},
+  ];
+  save();
+}
+
+function migrateProductFixes() {
+  let changed = false;
+  const smnehb = db.products.find(x=>x.id==='SMNEHB50100');
+  if (smnehb && smnehb.unitQty === 100) { smnehb.unitQty = 10; changed = true; }
+  if (changed) save();
+}
+
+function seedClientsIfEmpty() {
+  if (db.companies.length > 0) return;
+  db.companies = [
+    { id:'BB',  name:"Betty's Burgers",         discountPct:0, note:'ABN 98 659 913 783' },
+    { id:'CCR', name:"CCR SIA Betty's Burgers",  discountPct:0, note:'ABN 31 620 229 049 — Level 1/20 Charves St, Parramatta NSW 2150' },
+    { id:'SQB', name:"Slim's Quality Burger",   discountPct:0, note:'ABN 18 638 843 277' },
+    { id:'FF',  name:"Firefly Burger",          discountPct:0, note:'' },
+    { id:'BD',  name:"Burger District",         discountPct:0, note:'ABN 89 615 983 312 — 12 Garden Street, Belmore NSW 2192' },
+    { id:'FJ',  name:"Fat Jaks",               discountPct:0, note:'ABN 38671937910 — Shop C05, 1 Main Lane, Merrylands NSW 2160' },
+  ];
+  db.branches = [
+    // Betty's Burgers — 17 branches
+    { id:'02101', companyId:'BB', name:"Bondi Junction",  discountPct:null, note:'Shop 5050, Westfield Bondi Junction, 500 Oxford St, Bondi Junction NSW 2022' },
+    { id:'02102', companyId:'BB', name:"Castle Tower",     discountPct:null, note:'Shop 1, Castle Towers SC, Castle St, Castle Hill NSW 2154' },
+    { id:'02103', companyId:'BB', name:"Chatswood",        discountPct:null, note:'Westfield Chatswood Shop 377/378, 1 Anderson St, Chatswood NSW 2067' },
+    { id:'02105', companyId:'BB', name:"Coogee",           discountPct:null, note:'Tenancy 201-206 Arden St, Coogee NSW 2034' },
+    { id:'02107', companyId:'BB', name:"Darling Harbour",  discountPct:null, note:'Shop E-04, 14 Darling Drive, Sydney NSW 2000' },
+    { id:'02109', companyId:'BB', name:"Market St",        discountPct:null, note:'Shop 4/44 Market St, Sydney NSW 2000' },
+    { id:'02110', companyId:'BB', name:"Miranda",          discountPct:null, note:'Shop 2202, Westfield Miranda, 600 Kingsway, Miranda NSW 2228' },
+    { id:'02111', companyId:'BB', name:"Newcastle",        discountPct:null, note:'11 Perkins St, Newcastle NSW 2300' },
+    { id:'02112', companyId:'BB', name:"North Sydney",     discountPct:null, note:'Shop 4, 100 Mount St, North Sydney NSW 2060' },
+    { id:'02113', companyId:'BB', name:"Parramatta",       discountPct:null, note:'Parramatta Square Tenancy 4.01, 12 Darcy St, Parramatta NSW 2150' },
+    { id:'02115', companyId:'BB', name:"Darlinghurst",     discountPct:null, note:'1 Kings Cross Rd, Darlinghurst NSW 2010' },
+    { id:'02118', companyId:'BB', name:"Bondi Beach",      discountPct:null, note:'152 Campbell Parade, Bondi Beach NSW 2026' },
+    { id:'02119', companyId:'BB', name:"Hornsby",          discountPct:null, note:'236 Pacific Hwy, Hornsby NSW 2077' },
+    { id:'02121', companyId:'BB', name:"Penrith",          discountPct:null, note:'Shop 55A Westfield Penrith Plaza, Penrith NSW 2750' },
+    { id:'02123', companyId:'BB', name:"Macarthur Square", discountPct:null, note:'Shop L01-C038 Macarthur Square SC, 200 Gilchrist Dr, Campbelltown NSW 2560' },
+    { id:'02126', companyId:'BB', name:"Tuggerah",         discountPct:null, note:'Tenancy 1039, 50 Wyong Road, Tuggerah NSW 2259' },
+    { id:'02136', companyId:'BB', name:"Greenhills",       discountPct:null, note:'' },
+    // Slim's Quality Burger — 2 branches
+    { id:'02132', companyId:'SQB', name:"Marrickville", discountPct:null, note:'Shop 37N, 20 Smidmore Street, NSW 2204' },
+    { id:'02153', companyId:'SQB', name:"Pitt St Mall",  discountPct:null, note:'Level 5 Shop 509, Cnr. Pitt Street Mall & Market St, Sydney NSW 2000' },
+    // Firefly Burger — 3 branches
+    { id:'02155', companyId:'FF', name:"Belmore",  discountPct:null, note:'417 Burwood Rd, Belmore NSW 2192; ABN 34688480533' },
+    { id:'02149', companyId:'FF', name:"Granville", discountPct:null, note:'79a South St, Granville NSW 2142; ABN 60666063494' },
+    { id:'02151', companyId:'FF', name:"Fairfield", discountPct:null, note:'170 The Boulevarde, Fairfield Heights NSW 2165; ABN 24680326121' },
+  ];
+  save();
+}
+
+function seedShipIfEmpty() {
+  if (db.shipRecords.length > 0) return;
+  const D = '2026-04-28';
+  db.shipRecords = [
+    // ── Linuo deliveries ─────────────────────────────────────────────────────────
+    // INV-11999 Betty's Burgers Macarthur Square
+    {id:'INV-11999-1', date:D, productId:'RB8048',      companyId:'BB',  branchId:'02123', qty:1,  discountPct:0, creditUsed:0, finalAmount:30.72},
+    {id:'INV-11999-2', date:D, productId:'MB6548',      companyId:'BB',  branchId:'02123', qty:13, discountPct:0, creditUsed:0, finalAmount:399.36},
+    // INV-11998 Betty's Burgers Miranda
+    {id:'INV-11998-1', date:D, productId:'MB6548',      companyId:'BB',  branchId:'02110', qty:15, discountPct:0, creditUsed:0, finalAmount:460.80},
+    // INV-11997 CCR SIA Betty's Burgers
+    {id:'INV-11997-1', date:D, productId:'RB8048',      companyId:'CCR', branchId:null,    qty:1,  discountPct:0, creditUsed:0, finalAmount:30.72},
+    {id:'INV-11997-2', date:D, productId:'MB6548',      companyId:'CCR', branchId:null,    qty:13, discountPct:0, creditUsed:0, finalAmount:399.36},
+    // INV-11996 Slim's Marrickville
+    {id:'INV-11996-1', date:D, productId:'MB654802',    companyId:'SQB', branchId:'02132', qty:8,  discountPct:0, creditUsed:0, finalAmount:268.80},
+    // INV-11995 Betty's Burgers Coogee
+    {id:'INV-11995-1', date:D, productId:'RB8048',      companyId:'BB',  branchId:'02105', qty:1,  discountPct:0, creditUsed:0, finalAmount:30.72},
+    {id:'INV-11995-2', date:D, productId:'MB6548',      companyId:'BB',  branchId:'02105', qty:7,  discountPct:0, creditUsed:0, finalAmount:215.04},
+    // INV-11994 Betty's Burgers Bondi Beach
+    {id:'INV-11994-1', date:D, productId:'RB8048',      companyId:'BB',  branchId:'02118', qty:1,  discountPct:0, creditUsed:0, finalAmount:30.72},
+    {id:'INV-11994-2', date:D, productId:'MB6548',      companyId:'BB',  branchId:'02118', qty:22, discountPct:0, creditUsed:0, finalAmount:675.84},
+    // INV-11993 Betty's Burgers Bondi Junction
+    {id:'INV-11993-1', date:D, productId:'MB6548',      companyId:'BB',  branchId:'02101', qty:18, discountPct:0, creditUsed:0, finalAmount:552.96},
+    {id:'INV-11993-2', date:D, productId:'RB8048',      companyId:'BB',  branchId:'02101', qty:1,  discountPct:0, creditUsed:0, finalAmount:30.72},
+    // INV-11992 Firefly Burger Belmore
+    {id:'INV-11992-1', date:D, productId:'MB8048',      companyId:'FF',  branchId:'02155', qty:10, discountPct:0, creditUsed:0, finalAmount:384.00},
+    // INV-11991 Burger District
+    {id:'INV-11991-1', date:D, productId:'MB8030',      companyId:'BD',  branchId:null,    qty:12, discountPct:0, creditUsed:0, finalAmount:288.00},
+    {id:'INV-11991-2', date:D, productId:'SMNEHB50100', companyId:'BD',  branchId:null,    qty:2,  discountPct:0, creditUsed:0, finalAmount:140.00},
+    // ── Oscar deliveries ─────────────────────────────────────────────────────────
+    // INV-12009 Betty's Burgers Darlinghurst
+    {id:'INV-12009-1', date:D, productId:'RB8048',      companyId:'BB',  branchId:'02115', qty:1,  discountPct:0, creditUsed:0, finalAmount:30.72},
+    {id:'INV-12009-2', date:D, productId:'MB6548',      companyId:'BB',  branchId:'02115', qty:14, discountPct:0, creditUsed:0, finalAmount:430.08},
+    // INV-12008 Slim's Pitt St Mall
+    {id:'INV-12008-1', date:D, productId:'MB654802',    companyId:'SQB', branchId:'02153', qty:15, discountPct:0, creditUsed:0, finalAmount:504.00},
+    {id:'INV-12008-2', date:D, productId:'MS3510',      companyId:'SQB', branchId:'02153', qty:1,  discountPct:0, creditUsed:0, finalAmount:60.00},
+    // INV-12007 Betty's Burgers Market St
+    {id:'INV-12007-1', date:D, productId:'RB8048',      companyId:'BB',  branchId:'02109', qty:1,  discountPct:0, creditUsed:0, finalAmount:30.72},
+    {id:'INV-12007-2', date:D, productId:'MB6548',      companyId:'BB',  branchId:'02109', qty:13, discountPct:0, creditUsed:0, finalAmount:399.36},
+    // INV-12006 Betty's Burgers Darling Harbour
+    {id:'INV-12006-1', date:D, productId:'RB8048',      companyId:'BB',  branchId:'02107', qty:1,  discountPct:0, creditUsed:0, finalAmount:30.72},
+    {id:'INV-12006-2', date:D, productId:'MB6548',      companyId:'BB',  branchId:'02107', qty:19, discountPct:0, creditUsed:0, finalAmount:583.68},
+    // INV-12005 Betty's Burgers North Sydney
+    {id:'INV-12005-1', date:D, productId:'MB6548',      companyId:'BB',  branchId:'02112', qty:15, discountPct:0, creditUsed:0, finalAmount:460.80},
+    // INV-12004 Betty's Burgers Chatswood
+    {id:'INV-12004-1', date:D, productId:'RB8048',      companyId:'BB',  branchId:'02103', qty:1,  discountPct:0, creditUsed:0, finalAmount:30.72},
+    {id:'INV-12004-2', date:D, productId:'MB6548',      companyId:'BB',  branchId:'02103', qty:23, discountPct:0, creditUsed:0, finalAmount:706.56},
+    // INV-12003 Firefly Burger Granville
+    {id:'INV-12003-1', date:D, productId:'MB8048',      companyId:'FF',  branchId:'02149', qty:4,  discountPct:0, creditUsed:0, finalAmount:153.60},
+    {id:'INV-12003-2', date:D, productId:'STT',         companyId:'FF',  branchId:'02149', qty:1,  discountPct:0, creditUsed:0, finalAmount:60.00},
+    // INV-12002 Fat Jaks Merrylands
+    {id:'INV-12002-1', date:D, productId:'VBB6548',     companyId:'FJ',  branchId:null,    qty:6,  discountPct:0, creditUsed:0, finalAmount:201.60},
+    // INV-12001 Betty's Burgers Penrith
+    {id:'INV-12001-1', date:D, productId:'RB8048',      companyId:'BB',  branchId:'02121', qty:1,  discountPct:0, creditUsed:0, finalAmount:30.72},
+    {id:'INV-12001-2', date:D, productId:'MB6548',      companyId:'BB',  branchId:'02121', qty:7,  discountPct:0, creditUsed:0, finalAmount:215.04},
+    // INV-12000 Firefly Burger Fairfield
+    {id:'INV-12000-1', date:D, productId:'MB8048',      companyId:'FF',  branchId:'02151', qty:4,  discountPct:0, creditUsed:0, finalAmount:153.60},
+    // ── Tony deliveries ──────────────────────────────────────────────────────────
+    // INV-12015 Betty's Burgers Parramatta
+    {id:'INV-12015-1', date:D, productId:'MB6548',      companyId:'BB',  branchId:'02113', qty:18, discountPct:0, creditUsed:0, finalAmount:552.96},
+    // INV-12014 Betty's Burgers Castle Tower
+    {id:'INV-12014-1', date:D, productId:'MB6548',      companyId:'BB',  branchId:'02102', qty:14, discountPct:0, creditUsed:0, finalAmount:430.08},
+    // INV-12013 Betty's Burgers Hornsby
+    {id:'INV-12013-1', date:D, productId:'MB6548',      companyId:'BB',  branchId:'02119', qty:11, discountPct:0, creditUsed:0, finalAmount:337.92},
+    // INV-12012 Betty's Burgers Tuggerah
+    {id:'INV-12012-1', date:D, productId:'MB6548',      companyId:'BB',  branchId:'02126', qty:7,  discountPct:0, creditUsed:0, finalAmount:215.04},
+    // INV-12011 Betty's Burgers Newcastle
+    {id:'INV-12011-1', date:D, productId:'MB6548',      companyId:'BB',  branchId:'02111', qty:13, discountPct:0, creditUsed:0, finalAmount:399.36},
+    // INV-12010 Betty's Burgers Greenhills
+    {id:'INV-12010-1', date:D, productId:'MB6548',      companyId:'BB',  branchId:'02136', qty:20, discountPct:0, creditUsed:0, finalAmount:614.40},
   ];
   save();
 }
@@ -2835,6 +2956,9 @@ function seedIfEmpty() {
 // ════════════════════════════════════════
 load();
 seedIfEmpty();
+migrateProductFixes();
+seedClientsIfEmpty();
+seedShipIfEmpty();
 
 const now = new Date();
 document.getElementById('sidebar-date').textContent = now.toLocaleDateString('zh-TW', {year:'numeric',month:'long',day:'numeric',weekday:'short'});
