@@ -6,6 +6,7 @@
 <title>Bunz Bakery | 管理系統</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <style>
 :root {
   --bg: #f5f2ed;
@@ -114,7 +115,9 @@ nav { padding: 14px 10px; flex: 1; }
 .nav-btn:hover { background: var(--surface2); color: var(--text); }
 .nav-btn.active { background: var(--accent-light); color: var(--accent); }
 
-.nav-btn .icon { font-size: 15px; opacity: 0.8; }
+.nav-btn .icon { display: flex; align-items: center; opacity: 0.75; flex-shrink: 0; }
+.nav-btn .icon svg { width: 15px; height: 15px; stroke-width: 1.75; }
+.nav-btn.active .icon { opacity: 1; }
 
 .sidebar-date {
   padding: 14px 20px;
@@ -213,6 +216,70 @@ main {
 .metric-value.danger { color: var(--danger); }
 .metric-value.success { color: var(--accent); }
 .metric-hint { font-size: 11px; color: var(--text-3); margin-top: 4px; }
+
+/* ── Enhanced metric cards ── */
+.metric {
+  position: relative;
+  overflow: hidden;
+}
+.metric::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--border-strong);
+  border-radius: 3px 0 0 3px;
+}
+.metric.metric-warn::before { background: var(--warn); }
+.metric.metric-danger::before { background: var(--danger); }
+.metric.metric-success::before { background: var(--accent); }
+.metric.metric-warn { background: var(--warn-light); }
+.metric.metric-danger { background: var(--danger-light); }
+.metric-icon {
+  position: absolute;
+  top: 14px; right: 14px;
+  opacity: 0.12;
+}
+.metric-icon svg { width: 28px; height: 28px; stroke-width: 1.5; }
+.metric.metric-warn .metric-icon,
+.metric.metric-danger .metric-icon { opacity: 0.22; }
+.metric-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  margin-top: 5px;
+  font-family: var(--mono);
+}
+.metric-trend.up { color: var(--accent); }
+.metric-trend.down { color: var(--danger); }
+.metric-trend svg { width: 11px; height: 11px; stroke-width: 2; }
+
+/* ── Form fieldset grouping ── */
+.form-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 2px solid rgba(90, 168, 48, 0.25);
+  border-radius: var(--r-lg);
+  padding: 14px 16px 8px;
+  margin-bottom: 14px;
+}
+.form-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  opacity: 0.75;
+}
+.form-section-label svg {
+  width: 13px; height: 13px;
+  stroke-width: 2;
+}
 
 /* ── Forms ── */
 .form-grid {
@@ -801,31 +868,31 @@ aside {
   <nav>
     <div class="nav-group">
       <div class="nav-group-label">概覽</div>
-      <button class="nav-btn active" onclick="go('dashboard')"><span class="icon">◈</span> 今日總覽</button>
-      <button class="nav-btn" onclick="go('suggest')"><span class="icon">◎</span> 生產建議</button>
+      <button class="nav-btn active" onclick="go('dashboard')"><span class="icon"><i data-lucide="layout-dashboard"></i></span> 今日總覽</button>
+      <button class="nav-btn" onclick="go('suggest')"><span class="icon"><i data-lucide="lightbulb"></i></span> 生產建議</button>
     </div>
     <div class="nav-group">
       <div class="nav-group-label">每日作業</div>
-      <button class="nav-btn" onclick="go('daily-produce')"><span class="icon">⊕</span> 生產記錄</button>
-      <button class="nav-btn" onclick="go('daily-ship')"><span class="icon">⊙</span> 出貨記錄</button>
-      <button class="nav-btn" onclick="go('daily-purchase')"><span class="icon">⊘</span> 進貨記錄</button>
+      <button class="nav-btn" onclick="go('daily-produce')"><span class="icon"><i data-lucide="factory"></i></span> 生產記錄</button>
+      <button class="nav-btn" onclick="go('daily-ship')"><span class="icon"><i data-lucide="truck"></i></span> 出貨記錄</button>
+      <button class="nav-btn" onclick="go('daily-purchase')"><span class="icon"><i data-lucide="package-open"></i></span> 進貨記錄</button>
     </div>
     <div class="nav-group">
       <div class="nav-group-label">主檔設定</div>
-      <button class="nav-btn" onclick="go('products')"><span class="icon">▣</span> 產品設定</button>
-      <button class="nav-btn" onclick="go('materials')"><span class="icon">◧</span> 原物料設定</button>
-      <button class="nav-btn" onclick="go('clients')"><span class="icon">◉</span> 客戶設定</button>
-      <button class="nav-btn" onclick="go('suppliers')"><span class="icon">◫</span> 供應商設定</button>
+      <button class="nav-btn" onclick="go('products')"><span class="icon"><i data-lucide="croissant"></i></span> 產品設定</button>
+      <button class="nav-btn" onclick="go('materials')"><span class="icon"><i data-lucide="flask-conical"></i></span> 原物料設定</button>
+      <button class="nav-btn" onclick="go('clients')"><span class="icon"><i data-lucide="building-2"></i></span> 客戶設定</button>
+      <button class="nav-btn" onclick="go('suppliers')"><span class="icon"><i data-lucide="handshake"></i></span> 供應商設定</button>
     </div>
     <div class="nav-group">
       <div class="nav-group-label">報表</div>
-      <button class="nav-btn" onclick="go('report')"><span class="icon">▤</span> 出貨報表</button>
-      <button class="nav-btn" onclick="go('stock-report')"><span class="icon">▥</span> 庫存報表</button>
+      <button class="nav-btn" onclick="go('report')"><span class="icon"><i data-lucide="file-bar-chart-2"></i></span> 出貨報表</button>
+      <button class="nav-btn" onclick="go('stock-report')"><span class="icon"><i data-lucide="boxes"></i></span> 庫存報表</button>
     </div>
     <div class="nav-group">
       <div class="nav-group-label">資料</div>
-      <button class="nav-btn" onclick="go('changelog')"><span class="icon">◷</span> 變更日誌</button>
-      <button class="nav-btn" onclick="go('sync')"><span class="icon">⇄</span> 資料同步</button>
+      <button class="nav-btn" onclick="go('changelog')"><span class="icon"><i data-lucide="history"></i></span> 變更日誌</button>
+      <button class="nav-btn" onclick="go('sync')"><span class="icon"><i data-lucide="refresh-cw"></i></span> 資料同步</button>
     </div>
   </nav>
 </aside>
@@ -914,37 +981,51 @@ aside {
   </div>
   <div class="card">
     <div class="card-title">新增生產記錄</div>
-    <div class="form-grid">
-      <div class="form-group"><label>日期</label><input type="date" id="pr-date"></div>
-      <div class="form-group"><label>產品</label><select id="pr-product" onchange="onProduceProductChange()"></select></div>
-    </div>
-    <hr class="divider">
-    <div class="card-title" style="margin-bottom:10px">批次與良率</div>
-    <div class="form-grid-4">
-      <div class="form-group">
-        <label>實際批次數</label>
-        <input type="number" id="pr-batches" placeholder="例：35" oninput="calcProduceYield()">
+    <div class="form-section">
+      <div class="form-section-label">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        基本資訊
       </div>
-      <div class="form-group">
-        <label>預測產出（顆，自動）</label>
-        <input type="number" id="pr-predicted-pieces" readonly placeholder="—" style="background:var(--surface2);color:var(--text-3)">
-      </div>
-      <div class="form-group">
-        <label>實際包裝完成（<span id="pr-unit-label">箱</span>）</label>
-        <input type="number" id="pr-actual-units" placeholder="例：482" oninput="calcProduceYield()">
-      </div>
-      <div class="form-group">
-        <label>實際良品（顆，自動換算）</label>
-        <input type="number" id="pr-actual-pieces" readonly placeholder="—" style="background:var(--surface2);color:var(--text-3)">
+      <div class="form-grid">
+        <div class="form-group"><label>日期</label><input type="date" id="pr-date"></div>
+        <div class="form-group"><label>產品</label><select id="pr-product" onchange="onProduceProductChange()"></select></div>
       </div>
     </div>
-    <div id="pr-yield-display" style="margin-bottom:12px; font-size:13px; min-height:22px;"></div>
-    <hr class="divider">
-    <div class="card-title" style="margin-bottom:10px">原物料消耗（按批次預測 vs 實際）</div>
-    <div id="pr-materials-area">
-      <div class="empty" style="padding:12px">請先選擇產品</div>
+    <div class="form-section">
+      <div class="form-section-label">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+        批次與良率
+      </div>
+      <div class="form-grid-4">
+        <div class="form-group">
+          <label>實際批次數</label>
+          <input type="number" id="pr-batches" placeholder="例：35" oninput="calcProduceYield()">
+        </div>
+        <div class="form-group">
+          <label>預測產出（顆，自動）</label>
+          <input type="number" id="pr-predicted-pieces" readonly placeholder="—" style="background:var(--surface2);color:var(--text-3)">
+        </div>
+        <div class="form-group">
+          <label>實際包裝完成（<span id="pr-unit-label">箱</span>）</label>
+          <input type="number" id="pr-actual-units" placeholder="例：482" oninput="calcProduceYield()">
+        </div>
+        <div class="form-group">
+          <label>實際良品（顆，自動換算）</label>
+          <input type="number" id="pr-actual-pieces" readonly placeholder="—" style="background:var(--surface2);color:var(--text-3)">
+        </div>
+      </div>
+      <div id="pr-yield-display" style="margin-bottom:4px; font-size:13px; min-height:22px;"></div>
     </div>
-    <div class="form-group" style="margin-top:12px; margin-bottom:12px">
+    <div class="form-section">
+      <div class="form-section-label">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+        原物料消耗（按批次預測 vs 實際）
+      </div>
+      <div id="pr-materials-area">
+        <div class="empty" style="padding:12px">請先選擇產品</div>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:12px">
       <label>備註</label>
       <input type="text" id="pr-note" placeholder="選填，例：今日有一批因烤箱故障重做">
     </div>
@@ -971,45 +1052,61 @@ aside {
   </div>
   <div class="card">
     <div class="card-title">新增出貨記錄</div>
-    <div class="form-grid">
-      <div class="form-group"><label>日期</label><input type="date" id="sh-date"></div>
-      <div class="form-group"><label>產品</label><select id="sh-product"></select></div>
+    <div class="form-section">
+      <div class="form-section-label">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+        出貨對象
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>日期</label><input type="date" id="sh-date"></div>
+        <div class="form-group"><label>產品</label><select id="sh-product"></select></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>客戶公司</label>
+          <select id="sh-company" onchange="fillBranches()"></select>
+        </div>
+        <div class="form-group">
+          <label>分店（選填，不選則記為總公司）</label>
+          <select id="sh-branch"><option value="">── 總公司 ──</option></select>
+        </div>
+      </div>
     </div>
-    <div class="form-grid">
-      <div class="form-group">
-        <label>客戶公司</label>
-        <select id="sh-company" onchange="fillBranches()"></select>
+    <div class="form-section">
+      <div class="form-section-label">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        金額計算
       </div>
-      <div class="form-group">
-        <label>分店（選填，不選則記為總公司）</label>
-        <select id="sh-branch"><option value="">── 總公司 ──</option></select>
+      <div class="form-grid-3">
+        <div class="form-group"><label>出貨數量</label><input type="number" id="sh-qty" placeholder="0" oninput="calcShipTotal()"></div>
+        <div class="form-group">
+          <label>折扣</label>
+          <select id="sh-discount" onchange="calcShipTotal()">
+            <option value="">── 自動套用 ──</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Credit 折抵（元）</label><input type="number" id="sh-credit" placeholder="0" oninput="calcShipTotal()"></div>
       </div>
+      <div id="sh-total-preview" style="font-size:13px; color:var(--text-2); margin-bottom:4px;"></div>
     </div>
-    <div class="form-grid-3">
-      <div class="form-group"><label>出貨數量</label><input type="number" id="sh-qty" placeholder="0" oninput="calcShipTotal()"></div>
-      <div class="form-group">
-        <label>折扣</label>
-        <select id="sh-discount" onchange="calcShipTotal()">
-          <option value="">── 自動套用 ──</option>
-        </select>
+    <div class="form-section">
+      <div class="form-section-label">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+        環境記錄
       </div>
-      <div class="form-group"><label>Credit 折抵（元）</label><input type="number" id="sh-credit" placeholder="0" oninput="calcShipTotal()"></div>
-    </div>
-    <div id="sh-total-preview" style="font-size:13px; color:var(--text-2); margin-bottom:12px;"></div>
-    <hr class="divider">
-    <div class="card-title" style="margin-bottom:12px">環境記錄</div>
-    <div class="form-grid-4">
-      <div class="form-group">
-        <label>天氣</label>
-        <select id="sh-weather">
-          <option value="">請選擇</option>
-          <option>☀️ 晴天</option><option>⛅ 多雲</option><option>🌧️ 雨天</option>
-          <option>🌩️ 颱風</option><option>❄️ 寒流</option>
-        </select>
+      <div class="form-grid-4">
+        <div class="form-group">
+          <label>天氣</label>
+          <select id="sh-weather">
+            <option value="">請選擇</option>
+            <option>☀️ 晴天</option><option>⛅ 多雲</option><option>🌧️ 雨天</option>
+            <option>🌩️ 颱風</option><option>❄️ 寒流</option>
+          </select>
+        </div>
+        <div class="form-group"><label>最高溫（°C）</label><input type="number" id="sh-high" placeholder="—"></div>
+        <div class="form-group"><label>最低溫（°C）</label><input type="number" id="sh-low" placeholder="—"></div>
+        <div class="form-group"><label>節假日備註</label><input type="text" id="sh-holiday" placeholder="例：中秋節"></div>
       </div>
-      <div class="form-group"><label>最高溫（°C）</label><input type="number" id="sh-high" placeholder="—"></div>
-      <div class="form-group"><label>最低溫（°C）</label><input type="number" id="sh-low" placeholder="—"></div>
-      <div class="form-group"><label>節假日備註</label><input type="text" id="sh-holiday" placeholder="例：中秋節"></div>
     </div>
     <button class="btn btn-primary" onclick="addShipRecord()">新增出貨記錄</button>
   </div>
@@ -1587,6 +1684,7 @@ function go(tab) {
     'sync': ()=>{},
   };
   if(renders[tab]) renders[tab]();
+  if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
 function switchSubtab(page, sub) {
@@ -1610,12 +1708,39 @@ function renderDashboard() {
   const lowProducts = db.products.filter(p=>getProductStock(p.id)<=p.minStock).length;
   const lowMaterials = db.materials.filter(m=>getMaterialStock(m.id)<=m.minStock).length;
 
+  const iconFactory = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 0 0-1.022-.547l-2.387-.477a6 6 0 0 0-3.86.517l-.318.158a6 6 0 0 1-3.86.517L6.05 15.21a2 2 0 0 0-1.806.547M8 4h8l-1 1v5.172a2 2 0 0 0 .586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 0 0 9 10.172V5L8 4z"/></svg>`;
+  const iconTruck = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M1 3h15v13H1zM16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>`;
+  const iconMoney = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="2" y="6" width="20" height="12" rx="2"/><path stroke-linecap="round" d="M12 12m-2 0a2 2 0 1 0 4 0 2 2 0 0 0-4 0M6 12h.01M18 12h.01"/></svg>`;
+  const iconAlert = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>`;
   document.getElementById('dash-metrics').innerHTML = `
-    <div class="metric"><div class="metric-label">今日入庫（包裝）</div><div class="metric-value">${totalProduced.toLocaleString()}</div><div class="metric-hint">${totalProducedPieces.toLocaleString()} 顆</div></div>
-    <div class="metric"><div class="metric-label">今日出貨（件）</div><div class="metric-value">${totalShipQty.toLocaleString()}</div></div>
-    <div class="metric"><div class="metric-label">今日出貨金額</div><div class="metric-value">$${totalShipAmt.toLocaleString()}</div></div>
-    <div class="metric"><div class="metric-label">產品低庫存</div><div class="metric-value ${lowProducts>0?'warn':'success'}">${lowProducts}</div></div>
-    <div class="metric"><div class="metric-label">原料低庫存</div><div class="metric-value ${lowMaterials>0?'warn':'success'}">${lowMaterials}</div></div>
+    <div class="metric metric-success">
+      <div class="metric-icon">${iconFactory}</div>
+      <div class="metric-label">今日入庫（包裝）</div>
+      <div class="metric-value success">${totalProduced.toLocaleString()}</div>
+      <div class="metric-hint">${totalProducedPieces.toLocaleString()} 顆</div>
+    </div>
+    <div class="metric">
+      <div class="metric-icon">${iconTruck}</div>
+      <div class="metric-label">今日出貨（件）</div>
+      <div class="metric-value">${totalShipQty.toLocaleString()}</div>
+    </div>
+    <div class="metric">
+      <div class="metric-icon">${iconMoney}</div>
+      <div class="metric-label">今日出貨金額</div>
+      <div class="metric-value">$${totalShipAmt.toLocaleString()}</div>
+    </div>
+    <div class="metric ${lowProducts>0?'metric-warn':'metric-success'}">
+      <div class="metric-icon">${iconAlert}</div>
+      <div class="metric-label">產品低庫存</div>
+      <div class="metric-value ${lowProducts>0?'warn':'success'}">${lowProducts}</div>
+      <div class="metric-hint">${lowProducts>0?'需補貨':'庫存充足'}</div>
+    </div>
+    <div class="metric ${lowMaterials>0?'metric-warn':'metric-success'}">
+      <div class="metric-icon">${iconAlert}</div>
+      <div class="metric-label">原料低庫存</div>
+      <div class="metric-value ${lowMaterials>0?'warn':'success'}">${lowMaterials}</div>
+      <div class="metric-hint">${lowMaterials>0?'需採購':'庫存充足'}</div>
+    </div>
   `;
 
   document.getElementById('dash-product-stock').innerHTML = db.products.length
@@ -2798,57 +2923,78 @@ function makeRecipe(overrides = {}) {
 function seedIfEmpty() {
   if (db.products.length > 0) return;
   db.materials = [
-    { id:'BF', name:'Blue Flour (BF)',       unit:'袋（12.5kg）', initialStock:89,   minStock:2 },
-    { id:'RF', name:'Red Flour (RF)',        unit:'袋（12.5kg）', initialStock:89,   minStock:2 },
-    { id:'CS', name:'Caster Sugar (CS)',     unit:'袋（25kg）',   initialStock:32,   minStock:1 },
-    { id:'EE', name:'Egg (EE)',              unit:'箱（10kg）',   initialStock:123,  minStock:1 },
-    { id:'MP', name:'Milk Powder (MP)',      unit:'袋（25kg）',   initialStock:21,   minStock:1 },
-    { id:'IP', name:'Improver (IP)',         unit:'袋（15kg）',   initialStock:3,    minStock:1 },
-    { id:'SS', name:'Super Fine Salt (SS)',  unit:'袋（10kg）',   initialStock:5,    minStock:1 },
+    { id:'BF', name:'Blue Flour (BF)',       unit:'袋（12.5kg）', initialStock:52,   minStock:50 },
+    { id:'RF', name:'Red Flour (RF)',        unit:'袋（12.5kg）', initialStock:35,   minStock:50 },
+    { id:'CS', name:'Caster Sugar (CS)',     unit:'袋（25kg）',   initialStock:40,   minStock:20 },
+    { id:'EE', name:'Egg (EE)',              unit:'箱（10kg）',   initialStock:148,  minStock:80 },
+    { id:'MP', name:'Milk Powder (MP)',      unit:'袋（25kg）',   initialStock:15,   minStock:8 },
+    { id:'IP', name:'Improver (IP)',         unit:'袋（15kg）',   initialStock:8,    minStock:4 },
+    { id:'SS', name:'Super Fine Salt (SS)',  unit:'袋（10kg）',   initialStock:6,    minStock:3 },
     { id:'XL', name:'Xtendlife (XL)',        unit:'袋（25kg）',   initialStock:1,    minStock:1 },
-    { id:'SO', name:'Saftem Oil (SO)',       unit:'桶（10L）',    initialStock:21,   minStock:1 },
-    { id:'YS', name:'Yeast (YS)',            unit:'袋（500g）',   initialStock:2060, minStock:4 },
-    { id:'SG', name:'Sunset Glaze (SG)',     unit:'箱（10L）',    initialStock:37,   minStock:1 },
+    { id:'SO', name:'Saftem Oil (SO)',       unit:'桶（10L）',    initialStock:41,   minStock:15 },
+    { id:'YS', name:'Yeast (YS)',            unit:'袋（500g）',   initialStock:1860, minStock:600 },
+    { id:'SG', name:'Sunset Glaze (SG)',     unit:'箱（10L）',    initialStock:88,   minStock:60 },
     { id:'WS', name:'White Sesame (WS)',     unit:'袋（25kg）',   initialStock:4,    minStock:1 },
+    { id:'NU', name:'Nuttelex (NU)',         unit:'箱（15kg）',   initialStock:8,    minStock:4 },
     { id:'WT', name:'Water (WT)',            unit:'L',           initialStock:0,    minStock:0 },
   ];
   db.products = [
-    { id:'MB6530',      name:'MB6530 — Milk Bun 65g',                unit:'筐', unitQty:30,  price:19.20, batchOutput:696, defaultYieldPct:100, minStock:5, initialStock:156, recipe:makeRecipe()},
-    { id:'MB6548',      name:'MB6548 — Milk Bun 65g',                unit:'箱', unitQty:48,  price:30.72, batchOutput:696, defaultYieldPct:100, minStock:5, initialStock:307, recipe:makeRecipe()},
-    { id:'MB654802',    name:'MB654802 — Milk Bun 65g (風爐)',        unit:'箱', unitQty:48,  price:33.60, batchOutput:696, defaultYieldPct:100, minStock:5, initialStock:120, recipe:makeRecipe()},
-    { id:'MB8030',      name:'MB8030 — Milk Bun 80g',                unit:'筐', unitQty:30,  price:24.00, batchOutput:550, defaultYieldPct:100, minStock:5, initialStock:34,  recipe:makeRecipe({YS:0.62})},
-    { id:'MB8048',      name:'MB8048 — Milk Bun 80g',                unit:'箱', unitQty:48,  price:38.40, batchOutput:550, defaultYieldPct:100, minStock:5, initialStock:8,   recipe:makeRecipe({YS:0.62})},
-    { id:'MSB3096',     name:'MSB3096 — Mini Slider Bun 30g',        unit:'箱', unitQty:96,  price:48.00, batchOutput:400, defaultYieldPct:100, minStock:5, initialStock:4,   recipe:makeRecipe()},
-    { id:'MSB3596',     name:'MSB3596 — Mini Slider Bun 35g',        unit:'箱', unitQty:96,  price:48.00, batchOutput:400, defaultYieldPct:100, minStock:5, initialStock:3,   recipe:makeRecipe()},
-    { id:'MS3510',      name:'MS3510 — Milk Slab (35g×12)',          unit:'箱', unitQty:10,  price:60.00, batchOutput:20,  defaultYieldPct:100, minStock:3, initialStock:0,   recipe:makeRecipe()},
-    { id:'RB8048',      name:'RB8048 — Rustic Bun 80g',              unit:'箱', unitQty:48,  price:30.72, batchOutput:550, defaultYieldPct:100, minStock:5, initialStock:75,  recipe:makeRecipe()},
-    { id:'VBB6548',     name:'VBB6548 — Vegan Brioche Bun 65g',      unit:'箱', unitQty:48,  price:33.60, batchOutput:0,   defaultYieldPct:100, minStock:5, initialStock:46,  recipe:makeRecipe()},
-    { id:'STT',         name:'STT — Seed Texas Toast (65g×8)',       unit:'箱', unitQty:10,  price:60.00, batchOutput:32,  defaultYieldPct:100, minStock:3, initialStock:5,   recipe:makeRecipe()},
-    { id:'SMNEHB50100', name:'SMNEHB50100 — Seed Milk NE Hotdog Bun 50g', unit:'箱', unitQty:10,  price:70.00, batchOutput:0, defaultYieldPct:100, minStock:3, initialStock:39,  recipe:makeRecipe()},
-    { id:'GF10048',     name:'GF10048 — Gluten Free Bun 100g',       unit:'箱', unitQty:48,  price:0,     batchOutput:0,   defaultYieldPct:100, minStock:5, initialStock:36,  recipe:makeRecipe()},
+    { id:'MB6530',      name:'MB6530 — Milk Bun 65g',                unit:'筐', unitQty:30,  price:22.50, batchOutput:696, defaultYieldPct:100, minStock:120, initialStock:305, recipe:makeRecipe()},
+    { id:'MB6548',      name:'MB6548 — Milk Bun 65g',                unit:'箱', unitQty:48,  price:36.00, batchOutput:696, defaultYieldPct:100, minStock:28,  initialStock:349, recipe:makeRecipe()},
+    { id:'MB6536',      name:'MB6536 — Milk Bun 65g (小箱)',          unit:'箱', unitQty:36,  price:27.00, batchOutput:696, defaultYieldPct:100, minStock:1,   initialStock:0,   recipe:makeRecipe()},
+    { id:'MB654802',    name:'MB654802 — Milk Bun 65g (風爐)',        unit:'箱', unitQty:48,  price:36.00, batchOutput:696, defaultYieldPct:100, minStock:40,  initialStock:67,  recipe:makeRecipe()},
+    { id:'MB8030',      name:'MB8030 — Milk Bun 80g',                unit:'筐', unitQty:30,  price:24.00, batchOutput:550, defaultYieldPct:100, minStock:25,  initialStock:19,  recipe:makeRecipe({YS:0.62})},
+    { id:'MB8048',      name:'MB8048 — Milk Bun 80g',                unit:'箱', unitQty:48,  price:38.40, batchOutput:550, defaultYieldPct:100, minStock:20,  initialStock:-15, recipe:makeRecipe({YS:0.62})},
+    { id:'MB80481',     name:'MB80481 — Milk Bun 80g (風爐)',         unit:'箱', unitQty:48,  price:38.40, batchOutput:550, defaultYieldPct:100, minStock:20,  initialStock:0,   recipe:makeRecipe({YS:0.62})},
+    { id:'MSB3096',     name:'MSB3096 — Mini Slider Bun 30g',        unit:'箱', unitQty:96,  price:48.00, batchOutput:720, defaultYieldPct:100, minStock:5,   initialStock:8,   recipe:makeRecipe()},
+    { id:'MSB3596',     name:'MSB3596 — Mini Slider Bun 35g',        unit:'箱', unitQty:96,  price:48.00, batchOutput:400, defaultYieldPct:100, minStock:5,   initialStock:13,  recipe:makeRecipe()},
+    { id:'MS3510',      name:'MS3510 — Milk Slab (35g×12)',          unit:'箱', unitQty:10,  price:60.00, batchOutput:20,  defaultYieldPct:100, minStock:5,   initialStock:1,   recipe:makeRecipe()},
+    { id:'RB8048',      name:'RB8048 — Rustic Bun 80g',              unit:'箱', unitQty:48,  price:36.00, batchOutput:550, defaultYieldPct:100, minStock:28,  initialStock:49,  recipe:makeRecipe()},
+    { id:'VBB6548',     name:'VBB6548 — Vegan Brioche Bun 65g',      unit:'箱', unitQty:48,  price:36.00, batchOutput:0,   defaultYieldPct:100, minStock:28,  initialStock:35,  recipe:makeRecipe()},
+    { id:'STT',         name:'STT — Seed Texas Toast (65g×8)',       unit:'箱', unitQty:10,  price:60.00, batchOutput:32,  defaultYieldPct:100, minStock:12,  initialStock:4,   recipe:makeRecipe()},
+    { id:'SMNEHB50100', name:'SMNEHB50100 — Seed Milk NE Hotdog Bun 50g', unit:'箱', unitQty:10,  price:70.00, batchOutput:0, defaultYieldPct:100, minStock:28,  initialStock:26,  recipe:makeRecipe()},
+    { id:'GF10048',     name:'GF10048 — Gluten Free Bun 100g',       unit:'箱', unitQty:48,  price:98.40, batchOutput:0,   defaultYieldPct:100, minStock:28,  initialStock:29,  recipe:makeRecipe()},
   ];
   save();
 }
 
 function migrateProductFixes() {
   let changed = false;
+  // Fix SMNEHB50100 unitQty
   const smnehb = db.products.find(x=>x.id==='SMNEHB50100');
   if (smnehb && smnehb.unitQty === 100) { smnehb.unitQty = 10; changed = true; }
+  // Update 65g bun products to $0.75/bun standard pricing
+  const stdPrices = {MB6530:22.50, MB6536:27, MB6548:36, MB654802:36, RB8048:36, VBB6548:36, GF10048:98.40};
+  db.products.forEach(p=>{ if(stdPrices[p.id]!==undefined && p.price!==stdPrices[p.id]){p.price=stdPrices[p.id]; changed=true;} });
+  // Update company discounts based on contracted pricing
+  const coDiscounts = {BB:14.67, CCR:14.67, FJ:6.67};
+  db.companies.forEach(c=>{ if(coDiscounts[c.id]!==undefined && c.discountPct!==coDiscounts[c.id]){c.discountPct=coDiscounts[c.id]; changed=true;} });
+  // Update Slim's per-record discount (MB654802 only, not MS3510)
+  db.shipRecords.forEach(r=>{
+    if(r.companyId==='SQB' && r.productId==='MB654802' && r.discountPct!==6.67){r.discountPct=6.67; changed=true;}
+  });
+  // Fix MSB3096 batchOutput
+  const msb3096 = db.products.find(x=>x.id==='MSB3096');
+  if (msb3096 && msb3096.batchOutput !== 720) { msb3096.batchOutput = 720; changed = true; }
   if (changed) save();
 }
 
 function seedClientsIfEmpty() {
   if (db.companies.length > 0) return;
   db.companies = [
-    { id:'BB',  name:"Betty's Burgers",         discountPct:0, note:'ABN 98 659 913 783' },
-    { id:'CCR', name:"CCR SIA Betty's Burgers",  discountPct:0, note:'ABN 31 620 229 049 — Level 1/20 Charves St, Parramatta NSW 2150' },
-    { id:'SQB', name:"Slim's Quality Burger",   discountPct:0, note:'ABN 18 638 843 277' },
-    { id:'FF',  name:"Firefly Burger",          discountPct:0, note:'' },
-    { id:'BD',  name:"Burger District",         discountPct:0, note:'ABN 89 615 983 312 — 12 Garden Street, Belmore NSW 2192' },
-    { id:'FJ',  name:"Fat Jaks",               discountPct:0, note:'ABN 38671937910 — Shop C05, 1 Main Lane, Merrylands NSW 2160' },
+    { id:'BB',  name:"Betty's Burgers",         discountPct:14.67, note:'ABN 98 659 913 783' },
+    { id:'CCR', name:"CCR SIA Betty's Burgers",  discountPct:14.67, note:'ABN 31 620 229 049 — Level 1/20 Charves St, Parramatta NSW 2150' },
+    { id:'SQB', name:"Slim's Quality Burger",   discountPct:0,     note:'ABN 18 638 843 277' },
+    { id:'FF',  name:"Firefly Burger",          discountPct:0,     note:'' },
+    { id:'BD',  name:"Burger District",         discountPct:0,     note:'ABN 89 615 983 312 — 12 Garden Street, Belmore NSW 2192' },
+    { id:'FJ',  name:"Fat Jaks",               discountPct:6.67,  note:'ABN 38671937910 — Shop C05, 1 Main Lane, Merrylands NSW 2160' },
+    { id:'FK',  name:"Fricken",                discountPct:5,     note:'ABN 53 623 790 367' },
+    { id:'BFD', name:"Bidfood",               discountPct:4.22,  note:'ABN 33 000 228 231 — PO Box 273, Botany NSW 2039' },
+    { id:'HND', name:"High n Dry",            discountPct:0,     note:'ABN 19 628 323 795 — 71 Renwick St, Leichhardt NSW 2040' },
+    { id:'FFF', name:"Frankies Food Factory", discountPct:6.67,  note:'ABN 29 614 338 742 — 609 Old Northern Rd, Glenhaven NSW 2156' },
   ];
   db.branches = [
-    // Betty's Burgers — 17 branches
+    // Betty's Burgers — 20 branches (NSW + ACT)
     { id:'02101', companyId:'BB', name:"Bondi Junction",  discountPct:null, note:'Shop 5050, Westfield Bondi Junction, 500 Oxford St, Bondi Junction NSW 2022' },
     { id:'02102', companyId:'BB', name:"Castle Tower",     discountPct:null, note:'Shop 1, Castle Towers SC, Castle St, Castle Hill NSW 2154' },
     { id:'02103', companyId:'BB', name:"Chatswood",        discountPct:null, note:'Westfield Chatswood Shop 377/378, 1 Anderson St, Chatswood NSW 2067' },
@@ -2862,17 +3008,38 @@ function seedClientsIfEmpty() {
     { id:'02115', companyId:'BB', name:"Darlinghurst",     discountPct:null, note:'1 Kings Cross Rd, Darlinghurst NSW 2010' },
     { id:'02118', companyId:'BB', name:"Bondi Beach",      discountPct:null, note:'152 Campbell Parade, Bondi Beach NSW 2026' },
     { id:'02119', companyId:'BB', name:"Hornsby",          discountPct:null, note:'236 Pacific Hwy, Hornsby NSW 2077' },
+    { id:'02120', companyId:'BB', name:"Canberra",         discountPct:null, note:'Tenancy FG08148 Bunda Street, Canberra ACT 2601' },
     { id:'02121', companyId:'BB', name:"Penrith",          discountPct:null, note:'Shop 55A Westfield Penrith Plaza, Penrith NSW 2750' },
     { id:'02123', companyId:'BB', name:"Macarthur Square", discountPct:null, note:'Shop L01-C038 Macarthur Square SC, 200 Gilchrist Dr, Campbelltown NSW 2560' },
     { id:'02126', companyId:'BB', name:"Tuggerah",         discountPct:null, note:'Tenancy 1039, 50 Wyong Road, Tuggerah NSW 2259' },
+    { id:'02129', companyId:'BB', name:"Woden",            discountPct:null, note:'Tenancy R06 Westfield Woden, Keltie St, Phillip ACT 2606' },
     { id:'02136', companyId:'BB', name:"Greenhills",       discountPct:null, note:'' },
-    // Slim's Quality Burger — 2 branches
+    { id:'02150', companyId:'BB', name:"Gungahlin",        discountPct:null, note:'Corner Hibberson and Gungahlin Place, Gungahlin ACT 2912' },
+    // Slim's Quality Burger — 3 branches
     { id:'02132', companyId:'SQB', name:"Marrickville", discountPct:null, note:'Shop 37N, 20 Smidmore Street, NSW 2204' },
     { id:'02153', companyId:'SQB', name:"Pitt St Mall",  discountPct:null, note:'Level 5 Shop 509, Cnr. Pitt Street Mall & Market St, Sydney NSW 2000' },
+    { id:'02154', companyId:'SQB', name:"Mt Druitt",     discountPct:null, note:'Shop 2003, Westfield Mount Druitt SC, 48 Carlisle Ave & Luxford Rd, Mount Druitt NSW 2770' },
     // Firefly Burger — 3 branches
     { id:'02155', companyId:'FF', name:"Belmore",  discountPct:null, note:'417 Burwood Rd, Belmore NSW 2192; ABN 34688480533' },
     { id:'02149', companyId:'FF', name:"Granville", discountPct:null, note:'79a South St, Granville NSW 2142; ABN 60666063494' },
     { id:'02151', companyId:'FF', name:"Fairfield", discountPct:null, note:'170 The Boulevarde, Fairfield Heights NSW 2165; ABN 24680326121' },
+    // Fricken — 3 branches
+    { id:'02146', companyId:'FK', name:"Braddon",      discountPct:null, note:'58/10 Lonsdale St, Braddon ACT 2612' },
+    { id:'02147', companyId:'FK', name:"Tuggeranong",  discountPct:null, note:'44 Pitman St, Greenway ACT 2900' },
+    { id:'02148', companyId:'FK', name:"Food Truck",   discountPct:null, note:'Queen Elizabeth Tce, Parkes ACT 2600; Call: 0488 887 223; Code Room: 2600' },
+    // Bidfood — 1 branch
+    { id:'02161', companyId:'BFD', name:"Dubbo",        discountPct:null, note:'Bidfood Dubbo; Acct 370; billing: PO Box 273, Botany NSW 2039' },
+    // High n Dry — 1 branch
+    { id:'02117', companyId:'HND', name:"Leichhardt",   discountPct:null, note:'71 Renwick St, Leichhardt NSW 2040' },
+    // Betty's Burgers — additional branches
+    { id:'02104', companyId:'BB',  name:"Circular Quay",discountPct:null, note:'Tenancy 5-8 Gateway Plaza, 1 Macquarie Place, Sydney NSW 2000' },
+    { id:'02106', companyId:'BB',  name:"Cronulla",     discountPct:null, note:'Shop 1/59-65 Gerrale Street, Cronulla NSW 2230' },
+    // CCR — branch
+    { id:'02122', companyId:'CCR', name:"Parramatta",   discountPct:null, note:'Level 1/20 Charves St, Parramatta NSW 2150' },
+    // Burger District — branch
+    { id:'02128', companyId:'BD',  name:"Belmore",      discountPct:null, note:'12 Garden Street, Belmore NSW 2192' },
+    // Frankies Food Factory — 1 branch
+    { id:'02158', companyId:'FFF', name:"Glenhaven",    discountPct:null, note:'609 Old Northern Rd, Glenhaven NSW 2156; ABN: 29 614 338 742' },
   ];
   save();
 }
@@ -2947,6 +3114,171 @@ function seedShipIfEmpty() {
     {id:'INV-12011-1', date:D, productId:'MB6548',      companyId:'BB',  branchId:'02111', qty:13, discountPct:0, creditUsed:0, finalAmount:399.36},
     // INV-12010 Betty's Burgers Greenhills
     {id:'INV-12010-1', date:D, productId:'MB6548',      companyId:'BB',  branchId:'02136', qty:20, discountPct:0, creditUsed:0, finalAmount:614.40},
+    // ── Linuo 27 Apr deliveries ───────────────────────────────────────────────────
+    // INV-11990 Betty's Burgers Gungahlin
+    {id:'INV-11990-1', date:'2026-04-27', productId:'MB6530', companyId:'BB', branchId:'02150', qty:20, discountPct:14.67, creditUsed:0, finalAmount:384.00},
+    // ── Linuo 29 Apr deliveries ───────────────────────────────────────────────────
+    // INV-12022 Fricken Braddon
+    {id:'INV-12022-1', date:'2026-04-29', productId:'MB6548',  companyId:'FK', branchId:'02146', qty:2,  discountPct:5, creditUsed:0, finalAmount:68.40},
+    {id:'INV-12022-2', date:'2026-04-29', productId:'GF10048', companyId:'FK', branchId:'02146', qty:2,  discountPct:5, creditUsed:0, finalAmount:186.96},
+    // INV-12021 Betty's Burger Canberra
+    {id:'INV-12021-1', date:'2026-04-29', productId:'MB6548',  companyId:'BB', branchId:'02120', qty:15, discountPct:14.67, creditUsed:0, finalAmount:460.80},
+    // INV-12020 Betty's Burgers Woden
+    {id:'INV-12020-1', date:'2026-04-29', productId:'MB6530',  companyId:'BB', branchId:'02129', qty:25, discountPct:14.67, creditUsed:0, finalAmount:480.00},
+    // INV-12019 Fricken Tuggeranong
+    {id:'INV-12019-1', date:'2026-04-29', productId:'MB6548',  companyId:'FK', branchId:'02147', qty:5,  discountPct:5, creditUsed:0, finalAmount:171.00},
+    // INV-91004 Bidfood Dubbo (Bunz QLD invoice, MB6536 96箱)
+    {id:'INV-91004-1', date:'2026-04-30', productId:'MB6536',  companyId:'BFD', branchId:'02161', qty:96,  discountPct:4.22,  creditUsed:0, finalAmount:2482.56},
+    // ── 14 May 2026 — Tony ───────────────────────────────────────────────────────
+    {id:'INV-12237-1', date:'2026-05-14', productId:'MB6530', companyId:'BB',  branchId:'02113', qty:30, discountPct:14.67, creditUsed:0, finalAmount:576.00},
+    {id:'INV-12236-1', date:'2026-05-14', productId:'MB6530', companyId:'BB',  branchId:'02102', qty:25, discountPct:14.67, creditUsed:0, finalAmount:480.00},
+    {id:'INV-12235-1', date:'2026-05-14', productId:'MB6530', companyId:'BB',  branchId:'02119', qty:7,  discountPct:14.67, creditUsed:0, finalAmount:134.40},
+    {id:'INV-12234-1', date:'2026-05-14', productId:'MB6530', companyId:'BB',  branchId:'02126', qty:18, discountPct:14.67, creditUsed:0, finalAmount:345.60},
+    {id:'INV-12233-1', date:'2026-05-14', productId:'MB6530', companyId:'BB',  branchId:'02111', qty:17, discountPct:14.67, creditUsed:0, finalAmount:326.40},
+    {id:'INV-12232-1', date:'2026-05-14', productId:'MB6530', companyId:'BB',  branchId:'02136', qty:35, discountPct:14.67, creditUsed:0, finalAmount:672.00},
+    // ── 14 May 2026 — Linuo ─────────────────────────────────────────────────────
+    {id:'INV-12223-1', date:'2026-05-14', productId:'MB6530',      companyId:'BB',  branchId:'02123', qty:25, discountPct:14.67, creditUsed:0, finalAmount:480.00},
+    {id:'INV-12222-1', date:'2026-05-14', productId:'MB6530',      companyId:'BB',  branchId:'02110', qty:40, discountPct:14.67, creditUsed:0, finalAmount:768.00},
+    {id:'INV-12221-1', date:'2026-05-14', productId:'MB6530',      companyId:'BB',  branchId:'02106', qty:14, discountPct:14.67, creditUsed:0, finalAmount:268.80},
+    {id:'INV-12221-2', date:'2026-05-14', productId:'RB8048',      companyId:'BB',  branchId:'02106', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    {id:'INV-12220-1', date:'2026-05-14', productId:'MB6530',      companyId:'CCR', branchId:'02122', qty:18, discountPct:14.67, creditUsed:0, finalAmount:345.60},
+    {id:'INV-12219-1', date:'2026-05-14', productId:'MB654802',    companyId:'SQB', branchId:'02132', qty:10, discountPct:6.67,  creditUsed:0, finalAmount:336.00},
+    {id:'INV-12218-1', date:'2026-05-14', productId:'MB6530',      companyId:'BB',  branchId:'02105', qty:30, discountPct:14.67, creditUsed:0, finalAmount:576.00},
+    {id:'INV-12217-1', date:'2026-05-14', productId:'MB6530',      companyId:'BB',  branchId:'02118', qty:14, discountPct:14.67, creditUsed:0, finalAmount:268.80},
+    {id:'INV-12216-1', date:'2026-05-14', productId:'GF10048',     companyId:'HND', branchId:'02117', qty:2,  discountPct:0,     creditUsed:0, finalAmount:196.80},
+    {id:'INV-12215-1', date:'2026-05-14', productId:'MB8048',      companyId:'FF',  branchId:'02155', qty:8,  discountPct:0,     creditUsed:0, finalAmount:307.20},
+    {id:'INV-12214-1', date:'2026-05-14', productId:'MB8030',      companyId:'BD',  branchId:'02128', qty:12, discountPct:0,     creditUsed:0, finalAmount:288.00},
+    {id:'INV-12214-2', date:'2026-05-14', productId:'SMNEHB50100', companyId:'BD',  branchId:'02128', qty:2,  discountPct:0,     creditUsed:0, finalAmount:140.00},
+    {id:'INV-12213-1', date:'2026-05-14', productId:'MB8048',      companyId:'FF',  branchId:'02149', qty:3,  discountPct:0,     creditUsed:0, finalAmount:115.20},
+    {id:'INV-12213-2', date:'2026-05-14', productId:'STT',         companyId:'FF',  branchId:'02149', qty:1,  discountPct:0,     creditUsed:0, finalAmount:60.00},
+    // ── 14 May 2026 — Oscar ─────────────────────────────────────────────────────
+    {id:'INV-12231-1', date:'2026-05-14', productId:'MB6530', companyId:'BB',  branchId:'02115', qty:20, discountPct:14.67, creditUsed:0, finalAmount:384.00},
+    {id:'INV-12230-1', date:'2026-05-14', productId:'MB6530', companyId:'BB',  branchId:'02104', qty:10, discountPct:14.67, creditUsed:0, finalAmount:192.00},
+    {id:'INV-12230-2', date:'2026-05-14', productId:'RB8048', companyId:'BB',  branchId:'02104', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    {id:'INV-12229-1', date:'2026-05-14', productId:'MB654802',companyId:'SQB',branchId:'02153', qty:7,  discountPct:6.67,  creditUsed:0, finalAmount:235.20},
+    {id:'INV-12228-1', date:'2026-05-14', productId:'MB6530', companyId:'BB',  branchId:'02109', qty:15, discountPct:14.67, creditUsed:0, finalAmount:288.00},
+    {id:'INV-12227-1', date:'2026-05-14', productId:'MB6530', companyId:'BB',  branchId:'02107', qty:47, discountPct:14.67, creditUsed:0, finalAmount:902.40},
+    {id:'INV-12227-2', date:'2026-05-14', productId:'RB8048', companyId:'BB',  branchId:'02107', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    {id:'INV-12226-1', date:'2026-05-14', productId:'MB6530', companyId:'BB',  branchId:'02112', qty:18, discountPct:14.67, creditUsed:0, finalAmount:345.60},
+    {id:'INV-12225-1', date:'2026-05-14', productId:'MB6530', companyId:'BB',  branchId:'02103', qty:29, discountPct:14.67, creditUsed:0, finalAmount:556.80},
+    {id:'INV-12224-1', date:'2026-05-14', productId:'MB6530', companyId:'BB',  branchId:'02121', qty:26, discountPct:14.67, creditUsed:0, finalAmount:499.20},
+    {id:'INV-12224-2', date:'2026-05-14', productId:'RB8048', companyId:'BB',  branchId:'02121', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    // ── Linuo 15 May 2026 ────────────────────────────────────────────────────────
+    // INV-12243 Fricken Braddon
+    {id:'INV-12243-1', date:'2026-05-15', productId:'MB6548',      companyId:'FK', branchId:'02146', qty:10, discountPct:5, creditUsed:0, finalAmount:342.00},
+    {id:'INV-12243-2', date:'2026-05-15', productId:'GF10048',     companyId:'FK', branchId:'02146', qty:1,  discountPct:5, creditUsed:0, finalAmount:93.48},
+    // INV-12242 Betty's Burgers Gungahlin
+    {id:'INV-12242-1', date:'2026-05-15', productId:'MB6530',      companyId:'BB', branchId:'02150', qty:37, discountPct:14.67, creditUsed:0, finalAmount:710.40},
+    // INV-12241 Betty's Burgers Canberra
+    {id:'INV-12241-1', date:'2026-05-15', productId:'MB6530',      companyId:'BB', branchId:'02120', qty:24, discountPct:14.67, creditUsed:0, finalAmount:460.80},
+    {id:'INV-12241-2', date:'2026-05-15', productId:'RB8048',      companyId:'BB', branchId:'02120', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    // INV-12240 Betty's Burgers Woden
+    {id:'INV-12240-1', date:'2026-05-15', productId:'MB6530',      companyId:'BB', branchId:'02129', qty:35, discountPct:14.67, creditUsed:0, finalAmount:672.00},
+    // INV-12239 Fricken Tuggeranong
+    {id:'INV-12239-1', date:'2026-05-15', productId:'MB6548',      companyId:'FK', branchId:'02147', qty:4,  discountPct:5, creditUsed:0, finalAmount:136.80},
+    {id:'INV-12239-2', date:'2026-05-15', productId:'SMNEHB50100', companyId:'FK', branchId:'02147', qty:1,  discountPct:5, creditUsed:0, finalAmount:66.50},
+    // INV-12238 Fricken Food Truck
+    {id:'INV-12238-1', date:'2026-05-15', productId:'MB6548',      companyId:'FK', branchId:'02148', qty:4,  discountPct:5, creditUsed:0, finalAmount:136.80},
+    // ── 16 May 2026 ──────────────────────────────────────────────────────────────
+    // Linuo
+    // INV-12254 Betty's Burgers Macarthur Square
+    {id:'INV-12254-1', date:'2026-05-16', productId:'MB6530',      companyId:'BB',  branchId:'02123', qty:30, discountPct:14.67, creditUsed:0, finalAmount:576.00},
+    {id:'INV-12254-2', date:'2026-05-16', productId:'RB8048',      companyId:'BB',  branchId:'02123', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    // INV-12253 Betty's Burgers Miranda
+    {id:'INV-12253-1', date:'2026-05-16', productId:'MB6530',      companyId:'BB',  branchId:'02110', qty:43, discountPct:14.67, creditUsed:0, finalAmount:825.60},
+    // INV-12252 Betty's Burgers Cronulla
+    {id:'INV-12252-1', date:'2026-05-16', productId:'MB6530',      companyId:'BB',  branchId:'02106', qty:23, discountPct:14.67, creditUsed:0, finalAmount:441.60},
+    // INV-12251 CCR SIA Betty's Burgers Parramatta
+    {id:'INV-12251-1', date:'2026-05-16', productId:'MB6530',      companyId:'CCR', branchId:'02122', qty:21, discountPct:14.67, creditUsed:0, finalAmount:403.20},
+    // INV-12250 Slim's Quality Burger Marrickville
+    {id:'INV-12250-1', date:'2026-05-16', productId:'MB654802',    companyId:'SQB', branchId:'02132', qty:13, discountPct:6.67,  creditUsed:0, finalAmount:436.80},
+    // INV-12249 Betty's Burgers Coogee
+    {id:'INV-12249-1', date:'2026-05-16', productId:'MB6530',      companyId:'BB',  branchId:'02105', qty:55, discountPct:14.67, creditUsed:0, finalAmount:1056.00},
+    {id:'INV-12249-2', date:'2026-05-16', productId:'RB8048',      companyId:'BB',  branchId:'02105', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    // INV-12248 Bettys Burgers Bondi Beach
+    {id:'INV-12248-1', date:'2026-05-16', productId:'MB6530',      companyId:'BB',  branchId:'02118', qty:34, discountPct:14.67, creditUsed:0, finalAmount:652.80},
+    {id:'INV-12248-2', date:'2026-05-16', productId:'RB8048',      companyId:'BB',  branchId:'02118', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    // INV-12247 Betty's Burgers Bondi Junction
+    {id:'INV-12247-1', date:'2026-05-16', productId:'MB6530',      companyId:'BB',  branchId:'02101', qty:30, discountPct:14.67, creditUsed:0, finalAmount:576.00},
+    {id:'INV-12247-2', date:'2026-05-16', productId:'RB8048',      companyId:'BB',  branchId:'02101', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    // INV-12246 Firefly Burger Belmore
+    {id:'INV-12246-1', date:'2026-05-16', productId:'MB8048',      companyId:'FF',  branchId:'02155', qty:11, discountPct:0,     creditUsed:0, finalAmount:422.40},
+    // INV-12245 Burger District
+    {id:'INV-12245-1', date:'2026-05-16', productId:'MB8030',      companyId:'BD',  branchId:'02128', qty:20, discountPct:0,     creditUsed:0, finalAmount:480.00},
+    {id:'INV-12245-2', date:'2026-05-16', productId:'SMNEHB50100', companyId:'BD',  branchId:'02128', qty:2,  discountPct:0,     creditUsed:0, finalAmount:140.00},
+    // Oscar
+    // INV-12264 Betty's Burgers Darlinghurst
+    {id:'INV-12264-1', date:'2026-05-16', productId:'MB6530',      companyId:'BB',  branchId:'02115', qty:20, discountPct:14.67, creditUsed:0, finalAmount:384.00},
+    // INV-12263 Betty's Burgers Circular Quay
+    {id:'INV-12263-1', date:'2026-05-16', productId:'MB6530',      companyId:'BB',  branchId:'02104', qty:60, discountPct:14.67, creditUsed:0, finalAmount:1152.00},
+    {id:'INV-12263-2', date:'2026-05-16', productId:'RB8048',      companyId:'BB',  branchId:'02104', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    // INV-12262 Slim's Quality Burger Pitt St Mall
+    {id:'INV-12262-1', date:'2026-05-16', productId:'MB654802',    companyId:'SQB', branchId:'02153', qty:11, discountPct:6.67,  creditUsed:0, finalAmount:369.60},
+    // INV-12261 Betty's Burgers Market St
+    {id:'INV-12261-1', date:'2026-05-16', productId:'MB6530',      companyId:'BB',  branchId:'02109', qty:30, discountPct:14.67, creditUsed:0, finalAmount:576.00},
+    {id:'INV-12261-2', date:'2026-05-16', productId:'RB8048',      companyId:'BB',  branchId:'02109', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    // INV-12260 Betty's Burgers Darling Harbour
+    {id:'INV-12260-1', date:'2026-05-16', productId:'MB6530',      companyId:'BB',  branchId:'02107', qty:74, discountPct:14.67, creditUsed:0, finalAmount:1420.80},
+    {id:'INV-12260-2', date:'2026-05-16', productId:'RB8048',      companyId:'BB',  branchId:'02107', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    // INV-12259 Betty's Burgers North Sydney
+    {id:'INV-12259-1', date:'2026-05-16', productId:'MB6530',      companyId:'BB',  branchId:'02112', qty:28, discountPct:14.67, creditUsed:0, finalAmount:537.60},
+    {id:'INV-12259-2', date:'2026-05-16', productId:'RB8048',      companyId:'BB',  branchId:'02112', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    // INV-12258 Betty's Burgers Chatswood
+    {id:'INV-12258-1', date:'2026-05-16', productId:'MB6530',      companyId:'BB',  branchId:'02103', qty:29, discountPct:14.67, creditUsed:0, finalAmount:556.80},
+    {id:'INV-12258-2', date:'2026-05-16', productId:'RB8048',      companyId:'BB',  branchId:'02103', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    // INV-12257 Slim's Quality Burger Mt Druitt
+    {id:'INV-12257-1', date:'2026-05-16', productId:'MB654802',    companyId:'SQB', branchId:'02154', qty:5,  discountPct:6.67,  creditUsed:0, finalAmount:168.00},
+    // INV-12256 Betty's Burgers Penrith
+    {id:'INV-12256-1', date:'2026-05-16', productId:'MB6530',      companyId:'BB',  branchId:'02121', qty:27, discountPct:14.67, creditUsed:0, finalAmount:518.40},
+    // INV-12255 Firefly Burger Fairfield
+    {id:'INV-12255-1', date:'2026-05-16', productId:'MB8048',      companyId:'FF',  branchId:'02151', qty:4,  discountPct:0,     creditUsed:0, finalAmount:153.60},
+    // Tony
+    // INV-12271 Betty's Burgers Parramatta
+    {id:'INV-12271-1', date:'2026-05-16', productId:'MB6530',      companyId:'BB',  branchId:'02113', qty:30, discountPct:14.67, creditUsed:0, finalAmount:576.00},
+    // INV-12270 Betty's Burgers Castle Tower
+    {id:'INV-12270-1', date:'2026-05-16', productId:'MB6530',      companyId:'BB',  branchId:'02102', qty:36, discountPct:14.67, creditUsed:0, finalAmount:691.20},
+    // INV-12269 Frankies Food Factory Glenhaven (VBB6548 incl. 10% GST)
+    {id:'INV-12269-1', date:'2026-05-16', productId:'VBB6548',     companyId:'FFF', branchId:'02158', qty:3,  discountPct:6.67,  creditUsed:0, finalAmount:110.88},
+    {id:'INV-12269-2', date:'2026-05-16', productId:'MSB3096',     companyId:'FFF', branchId:'02158', qty:1,  discountPct:0,     creditUsed:0, finalAmount:48.00},
+    // INV-12268 Betty's Burgers Hornsby
+    {id:'INV-12268-1', date:'2026-05-16', productId:'MB6530',      companyId:'BB',  branchId:'02119', qty:33, discountPct:14.67, creditUsed:0, finalAmount:633.60},
+    {id:'INV-12268-2', date:'2026-05-16', productId:'RB8048',      companyId:'BB',  branchId:'02119', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    // INV-12267 Bettys Burgers Tuggerah
+    {id:'INV-12267-1', date:'2026-05-16', productId:'MB6530',      companyId:'BB',  branchId:'02126', qty:16, discountPct:14.67, creditUsed:0, finalAmount:307.20},
+    // INV-12266 Betty's Burgers Newcastle
+    {id:'INV-12266-1', date:'2026-05-16', productId:'MB6530',      companyId:'BB',  branchId:'02111', qty:20, discountPct:14.67, creditUsed:0, finalAmount:384.00},
+    // INV-12265 Bettys Burgers Greenhills
+    {id:'INV-12265-1', date:'2026-05-16', productId:'MB6530',      companyId:'BB',  branchId:'02136', qty:10, discountPct:14.67, creditUsed:0, finalAmount:192.00},
+    {id:'INV-12265-2', date:'2026-05-16', productId:'RB8048',      companyId:'BB',  branchId:'02136', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+  ];
+  save();
+}
+
+function seedProduceRecordsIfEmpty() {
+  if (db.produceRecords && db.produceRecords.length > 0) return;
+  db.produceRecords = [
+    // 28 Apr 2026 — 19輪常規 + 5輪風爐
+    // MB65 18輪：180框(MB6530) + 55大箱(MB6548) + 96小箱(36顆/箱，待SKU確認)= 11496顆
+    { id:'PROD-20260428-1', date:'2026-04-28', productId:'MB6530',  batches:8.46, predictedPieces:5888, actualPieces:5400, actualUnits:180, actualYieldPct:91.71, note:'MB65 18輪分裝（框30顆）', materialUsage:[] },
+    { id:'PROD-20260428-2', date:'2026-04-28', productId:'MB6548',  batches:4.13, predictedPieces:2874, actualPieces:2640, actualUnits:55,  actualYieldPct:91.86, note:'MB65 18輪分裝（大箱48顆）', materialUsage:[] },
+    { id:'PROD-20260428-6', date:'2026-04-28', productId:'MB6536',  batches:5.41, predictedPieces:3765, actualPieces:3456, actualUnits:96,  actualYieldPct:91.79, note:'MB65 18輪分裝（小箱36顆）', materialUsage:[] },
+    // MB80 1.4輪：25框 + 2包散裝 = 762顆
+    { id:'PROD-20260428-3', date:'2026-04-28', productId:'MB8030',  batches:1.4,  predictedPieces:770,  actualPieces:750,  actualUnits:25,  actualYieldPct:97.40, note:'MB80 1.4輪（框30顆）；2包散裝未入庫', materialUsage:[] },
+    // Milk Slab：12盒（1箱+2包散裝）
+    { id:'PROD-20260428-4', date:'2026-04-28', productId:'MS3510',  batches:0.5,  predictedPieces:10,   actualPieces:10,   actualUnits:1,   actualYieldPct:100,   note:'12盒（1箱+2包散裝）；2包散裝未入庫', materialUsage:[] },
+    // 風爐80g 4.5輪：50箱 + 7包散裝 = 2442顆
+    { id:'PROD-20260428-5', date:'2026-04-28', productId:'MB8048',  batches:4.5,  predictedPieces:2475, actualPieces:2400, actualUnits:50,  actualYieldPct:96.97, note:'風爐80g 4.5輪；7包散裝(42顆)未入庫', materialUsage:[] },
+    // 14 May 2026
+    { id:'PROD-20260514-1', date:'2026-05-14', productId:'MB6530',   batches:7,    predictedPieces:4872, actualPieces:4380, actualUnits:146, actualYieldPct:89.90, note:'MB65 7輪分裝（筐30顆）；第四套層爐一層故障，實際每輪55盤×12顆', materialUsage:[] },
+    { id:'PROD-20260514-2', date:'2026-05-14', productId:'MB8048',   batches:1.84, predictedPieces:1012, actualPieces:960,  actualUnits:20,  actualYieldPct:94.86, note:'MB80 5輪共分裝（箱48顆份）', materialUsage:[] },
+    { id:'PROD-20260514-3', date:'2026-05-14', productId:'MB8030',   batches:3.16, predictedPieces:1738, actualPieces:1650, actualUnits:55,  actualYieldPct:94.94, note:'MB80 5輪共分裝（筐30顆份）', materialUsage:[] },
+    { id:'PROD-20260514-4', date:'2026-05-14', productId:'MSB3096',  batches:1,    predictedPieces:720,  actualPieces:672,  actualUnits:7,   actualYieldPct:93.33, note:'MSB30g 1輪（箱96顆）', materialUsage:[] },
+    { id:'PROD-20260514-5', date:'2026-05-14', productId:'MB654802', batches:4,    predictedPieces:2784, actualPieces:2736, actualUnits:57,  actualYieldPct:98.28, note:'MB65 風爐4輪（箱48顆）', materialUsage:[] },
+    // 14 May — 分廠轉入
+    { id:'PROD-20260514-T1', date:'2026-05-14', productId:'MS3510',      batches:0, predictedPieces:0, actualPieces:10,   actualUnits:1,  actualYieldPct:100, note:'分廠轉入', materialUsage:[] },
+    { id:'PROD-20260514-T2', date:'2026-05-14', productId:'STT',         batches:0, predictedPieces:0, actualPieces:360,  actualUnits:36, actualYieldPct:100, note:'分廠轉入', materialUsage:[] },
+    { id:'PROD-20260514-T3', date:'2026-05-14', productId:'SMNEHB50100', batches:0, predictedPieces:0, actualPieces:190,  actualUnits:19, actualYieldPct:100, note:'分廠轉入', materialUsage:[] },
+    { id:'PROD-20260514-T4', date:'2026-05-14', productId:'MB80481',     batches:0, predictedPieces:0, actualPieces:2688, actualUnits:56, actualYieldPct:100, note:'分廠轉入', materialUsage:[] },
   ];
   save();
 }
@@ -2959,6 +3291,7 @@ seedIfEmpty();
 migrateProductFixes();
 seedClientsIfEmpty();
 seedShipIfEmpty();
+seedProduceRecordsIfEmpty();
 
 const now = new Date();
 document.getElementById('sidebar-date').textContent = now.toLocaleDateString('zh-TW', {year:'numeric',month:'long',day:'numeric',weekday:'short'});
