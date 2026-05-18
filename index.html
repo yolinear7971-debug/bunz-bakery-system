@@ -3038,8 +3038,9 @@ function seedClientsIfEmpty() {
     { id:'02122', companyId:'CCR', name:"Parramatta",   discountPct:null, note:'Level 1/20 Charves St, Parramatta NSW 2150' },
     // Burger District — branch
     { id:'02128', companyId:'BD',  name:"Belmore",      discountPct:null, note:'12 Garden Street, Belmore NSW 2192' },
-    // Frankies Food Factory — 1 branch
+    // Frankies Food Factory — 2 branches
     { id:'02158', companyId:'FFF', name:"Glenhaven",    discountPct:null, note:'609 Old Northern Rd, Glenhaven NSW 2156; ABN: 29 614 338 742' },
+    { id:'02160', companyId:'FFF', name:"Milperra",     discountPct:null, note:'5/479 Henry Lawson Dr, Milperra NSW 2214; ABN: 19 624 506 190' },
   ];
   save();
 }
@@ -3250,6 +3251,45 @@ function seedShipIfEmpty() {
     // INV-12265 Bettys Burgers Greenhills
     {id:'INV-12265-1', date:'2026-05-16', productId:'MB6530',      companyId:'BB',  branchId:'02136', qty:10, discountPct:14.67, creditUsed:0, finalAmount:192.00},
     {id:'INV-12265-2', date:'2026-05-16', productId:'RB8048',      companyId:'BB',  branchId:'02136', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    // 19 May 2026 — Linuo route
+    {id:'INV-12283-1', date:'2026-05-19', productId:'MB6530',      companyId:'BB',  branchId:'02123', qty:20, discountPct:14.67, creditUsed:0, finalAmount:384.0},
+    {id:'INV-12282-1', date:'2026-05-19', productId:'MB6530',      companyId:'BB',  branchId:'02106', qty:3,  discountPct:14.67, creditUsed:0, finalAmount:57.6},
+    {id:'INV-12281-1', date:'2026-05-19', productId:'MB6530',      companyId:'CCR', branchId:'02122', qty:32, discountPct:14.67, creditUsed:0, finalAmount:614.4},
+    {id:'INV-12280-1', date:'2026-05-19', productId:'MB654802',    companyId:'SQB', branchId:'02132', qty:8,  discountPct:6.67,  creditUsed:0, finalAmount:268.8},
+    {id:'INV-12279-1', date:'2026-05-19', productId:'MB6530',      companyId:'BB',  branchId:'02118', qty:14, discountPct:14.67, creditUsed:0, finalAmount:268.8},
+    {id:'INV-12278-1', date:'2026-05-19', productId:'MB6530',      companyId:'BB',  branchId:'02101', qty:40, discountPct:14.67, creditUsed:0, finalAmount:768.0},
+    {id:'INV-12278-2', date:'2026-05-19', productId:'RB8048',      companyId:'BB',  branchId:'02101', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    {id:'INV-12277-1', date:'2026-05-19', productId:'MB8048',      companyId:'FF',  branchId:'02155', qty:6,  discountPct:0,     creditUsed:0, finalAmount:230.4},
+    {id:'INV-12276-1', date:'2026-05-19', productId:'MB8030',      companyId:'BD',  branchId:'02128', qty:16, discountPct:0,     creditUsed:0, finalAmount:384.0},
+    {id:'INV-12276-2', date:'2026-05-19', productId:'SMNEHB50100', companyId:'BD',  branchId:'02128', qty:2,  discountPct:0,     creditUsed:0, finalAmount:140.0},
+    // INV-12275 FFF Milperra — VBB6548 incl. 10% GST; MSB3096 GST free
+    {id:'INV-12275-1', date:'2026-05-19', productId:'VBB6548',     companyId:'FFF', branchId:'02160', qty:4,  discountPct:6.67,  creditUsed:0, finalAmount:147.84},
+    {id:'INV-12275-2', date:'2026-05-19', productId:'MSB3096',     companyId:'FFF', branchId:'02160', qty:2,  discountPct:0,     creditUsed:0, finalAmount:96.0},
+    // 19 May 2026 — Nash route
+    {id:'INV-12291-1', date:'2026-05-19', productId:'MB6530',      companyId:'BB',  branchId:'02115', qty:15, discountPct:14.67, creditUsed:0, finalAmount:288.0},
+    {id:'INV-12291-2', date:'2026-05-19', productId:'RB8048',      companyId:'BB',  branchId:'02115', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    {id:'INV-12290-1', date:'2026-05-19', productId:'MB654802',    companyId:'SQB', branchId:'02153', qty:6,  discountPct:6.67,  creditUsed:0, finalAmount:201.6},
+    {id:'INV-12289-1', date:'2026-05-19', productId:'MB6530',      companyId:'BB',  branchId:'02109', qty:25, discountPct:14.67, creditUsed:0, finalAmount:480.0},
+    {id:'INV-12288-1', date:'2026-05-19', productId:'MB6530',      companyId:'BB',  branchId:'02112', qty:28, discountPct:14.67, creditUsed:0, finalAmount:537.6},
+    {id:'INV-12288-2', date:'2026-05-19', productId:'RB8048',      companyId:'BB',  branchId:'02112', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    {id:'INV-12287-1', date:'2026-05-19', productId:'MB6530',      companyId:'BB',  branchId:'02103', qty:30, discountPct:14.67, creditUsed:0, finalAmount:576.0},
+    // INV-12286 Chatswood Add-On (RB8048 only)
+    {id:'INV-12286-1', date:'2026-05-19', productId:'RB8048',      companyId:'BB',  branchId:'02103', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    {id:'INV-12285-1', date:'2026-05-19', productId:'MB654802',    companyId:'SQB', branchId:'02154', qty:4,  discountPct:6.67,  creditUsed:0, finalAmount:134.4},
+    {id:'INV-12284-1', date:'2026-05-19', productId:'MB6530',      companyId:'BB',  branchId:'02121', qty:7,  discountPct:14.67, creditUsed:0, finalAmount:134.4},
+    // 19 May 2026 — Tony route
+    {id:'INV-12298-1', date:'2026-05-19', productId:'MB6530',      companyId:'BB',  branchId:'02113', qty:20, discountPct:14.67, creditUsed:0, finalAmount:384.0},
+    {id:'INV-12297-1', date:'2026-05-19', productId:'MB6530',      companyId:'BB',  branchId:'02102', qty:22, discountPct:14.67, creditUsed:0, finalAmount:422.4},
+    {id:'INV-12297-2', date:'2026-05-19', productId:'RB8048',      companyId:'BB',  branchId:'02102', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    // INV-12296 FFF Glenhaven — VBB6548 incl. 10% GST; MSB3096 GST free
+    {id:'INV-12296-1', date:'2026-05-19', productId:'VBB6548',     companyId:'FFF', branchId:'02158', qty:3,  discountPct:6.67,  creditUsed:0, finalAmount:110.88},
+    {id:'INV-12296-2', date:'2026-05-19', productId:'MSB3096',     companyId:'FFF', branchId:'02158', qty:1,  discountPct:0,     creditUsed:0, finalAmount:48.0},
+    {id:'INV-12295-1', date:'2026-05-19', productId:'MB6530',      companyId:'BB',  branchId:'02119', qty:9,  discountPct:14.67, creditUsed:0, finalAmount:172.8},
+    {id:'INV-12294-1', date:'2026-05-19', productId:'MB6530',      companyId:'BB',  branchId:'02126', qty:17, discountPct:14.67, creditUsed:0, finalAmount:326.4},
+    {id:'INV-12293-1', date:'2026-05-19', productId:'MB6530',      companyId:'BB',  branchId:'02111', qty:15, discountPct:14.67, creditUsed:0, finalAmount:288.0},
+    {id:'INV-12293-2', date:'2026-05-19', productId:'RB8048',      companyId:'BB',  branchId:'02111', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
+    {id:'INV-12292-1', date:'2026-05-19', productId:'MB6530',      companyId:'BB',  branchId:'02136', qty:22, discountPct:14.67, creditUsed:0, finalAmount:422.4},
+    {id:'INV-12292-2', date:'2026-05-19', productId:'RB8048',      companyId:'BB',  branchId:'02136', qty:1,  discountPct:14.67, creditUsed:0, finalAmount:30.72},
   ];
   save();
 }
